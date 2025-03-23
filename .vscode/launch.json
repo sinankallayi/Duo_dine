@@ -31,18 +31,10 @@
             "type": "dart"
         },
         {
-            "name": "restro_admin (profile mode)",
-            "cwd": "restro_admin",
+            "name": "restro_delivery",
+            "cwd": "restro_delivery",
             "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
+            "type": "dart"
         },
-        {
-            "name": "restro_admin (release mode)",
-            "cwd": "restro_admin",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
     ]
 }
