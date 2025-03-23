@@ -1,0 +1,671 @@
+{
+    "projectId": "67dc5f7e003032d8838b",
+    "projectName": "restro",
+    "settings": {
+        "services": {
+            "account": true,
+            "avatars": true,
+            "databases": true,
+            "locale": true,
+            "health": true,
+            "storage": true,
+            "teams": true,
+            "users": true,
+            "functions": true,
+            "graphql": true,
+            "messaging": true
+        },
+        "auth": {
+            "methods": {
+                "jwt": true,
+                "phone": true,
+                "invites": true,
+                "anonymous": true,
+                "email-otp": true,
+                "magic-url": true,
+                "email-password": true
+            },
+            "security": {
+                "duration": 31536000,
+                "limit": 0,
+                "sessionsLimit": 10,
+                "passwordHistory": 0,
+                "passwordDictionary": false,
+                "personalDataCheck": false,
+                "sessionAlerts": false,
+                "mockNumbers": []
+            }
+        }
+    },
+    "databases": [
+        {
+            "$id": "67dd045f0027aa53f550",
+            "name": "Duo Dine",
+            "enabled": true
+        }
+    ],
+    "collections": [
+        {
+            "$id": "67dd048f000c39c77100",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "restaurant",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "name",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                },
+                {
+                    "key": "address",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 60,
+                    "default": null
+                },
+                {
+                    "key": "location",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 60,
+                    "default": null
+                },
+                {
+                    "key": "tags",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 30,
+                    "default": null
+                },
+                {
+                    "key": "description",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 60,
+                    "default": null
+                },
+                {
+                    "key": "approved",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": false
+                },
+                {
+                    "key": "phone",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 10,
+                    "default": null
+                },
+                {
+                    "key": "rating",
+                    "type": "double",
+                    "required": false,
+                    "array": false,
+                    "min": 0,
+                    "max": 5,
+                    "default": 0
+                },
+                {
+                    "key": "id",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 50,
+                    "default": null
+                },
+                {
+                    "key": "image",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 100,
+                    "default": null
+                },
+                {
+                    "key": "createdAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                },
+                {
+                    "key": "updatedAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67dd04a6002e67174a99",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "items",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "name",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                },
+                {
+                    "key": "description",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 60,
+                    "default": null
+                },
+                {
+                    "key": "price",
+                    "type": "double",
+                    "required": true,
+                    "array": false,
+                    "min": -1.7976931348623157e+308,
+                    "max": 1.7976931348623157e+308,
+                    "default": null
+                },
+                {
+                    "key": "availability",
+                    "type": "boolean",
+                    "required": true,
+                    "array": false,
+                    "default": null
+                },
+                {
+                    "key": "featured",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": null
+                },
+                {
+                    "key": "rating",
+                    "type": "double",
+                    "required": false,
+                    "array": false,
+                    "min": -1.7976931348623157e+308,
+                    "max": 1.7976931348623157e+308,
+                    "default": null
+                },
+                {
+                    "key": "restaurant",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd048f000c39c77100",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "items",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "category",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 30,
+                    "default": null
+                },
+                {
+                    "key": "imageId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "id",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "createdAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                },
+                {
+                    "key": "updatedAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67dd04cd00213c02a849",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "cart",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "quantity",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "min": -9223372036854775808,
+                    "max": 9223372036854775807,
+                    "default": null
+                },
+                {
+                    "key": "items",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd04a6002e67174a99",
+                    "relationType": "oneToOne",
+                    "twoWay": false,
+                    "twoWayKey": "cart",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "users",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd04dd002d7a8904c0",
+                    "relationType": "oneToOne",
+                    "twoWay": false,
+                    "twoWayKey": "67de8fd900235a40d7be",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67dd04dd002d7a8904c0",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "user",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "role",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67dd04fc000ed6704e19",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "orderitems",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "id",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "qty",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "min": -9223372036854775808,
+                    "max": 9223372036854775807,
+                    "default": null
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "items",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd04a6002e67174a99",
+                    "relationType": "oneToMany",
+                    "twoWay": false,
+                    "twoWayKey": "67ddbe78003bfe532b1c",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "orders",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd0515002b7198c687",
+                    "relationType": "oneToMany",
+                    "twoWay": false,
+                    "twoWayKey": "67ddbeb6000f0c7c4dd5",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "deliverypersonnel",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd05340013b2b0b2c6",
+                    "relationType": "oneToMany",
+                    "twoWay": false,
+                    "twoWayKey": "67ddbef0002d66d30461",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "restaurant",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd048f000c39c77100",
+                    "relationType": "oneToMany",
+                    "twoWay": false,
+                    "twoWayKey": "67ddbf10002e14f9d2a4",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67dd0515002b7198c687",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "orders",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "id",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "restaurant",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd048f000c39c77100",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "67ddbfd600301730920d",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "createdAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                },
+                {
+                    "key": "total_price",
+                    "type": "double",
+                    "required": false,
+                    "array": false,
+                    "min": -1.7976931348623157e+308,
+                    "max": 1.7976931348623157e+308,
+                    "default": null
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "complaints",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 80,
+                    "default": null
+                },
+                {
+                    "key": "users",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd04dd002d7a8904c0",
+                    "relationType": "oneToOne",
+                    "twoWay": false,
+                    "twoWayKey": "67dfe44b0012794cbf07",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67dd05340013b2b0b2c6",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "deliverypersonnel",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "available",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": true
+                },
+                {
+                    "key": "phone",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 10,
+                    "default": null
+                },
+                {
+                    "key": "location",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "name",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                },
+                {
+                    "key": "id",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67dd0546003ce99e749f",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "payments",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "isProcessing",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": false
+                },
+                {
+                    "key": "cardNumber",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                },
+                {
+                    "key": "expiryDate",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "cardHolderName",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                },
+                {
+                    "key": "cvvCode",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 5,
+                    "default": null
+                },
+                {
+                    "key": "isCvvFocused",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": false
+                }
+            ],
+            "indexes": []
+        }
+    ],
+    "buckets": [
+        {
+            "$id": "67dd058f002e7a062527",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")"
+            ],
+            "fileSecurity": false,
+            "name": "items",
+            "enabled": true,
+            "maximumFileSize": 50000000,
+            "allowedFileExtensions": [
+                "jpg",
+                "png"
+            ],
+            "compression": "none",
+            "encryption": true,
+            "antivirus": true
+        }
+    ]
+}
