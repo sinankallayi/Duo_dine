@@ -48,12 +48,11 @@ Future<bool> checkPermissions() async {
   if (await permission.isDenied) {
     PermissionStatus status = await permission.request();
     if (!status.isGranted) {
-      Fluttertoast.showToast(msg: 'Photos permission denied');
       permission = Permission.storage;
       if (await permission.isDenied) {
         PermissionStatus status = await permission.request();
         if (!status.isGranted) {
-          Fluttertoast.showToast(msg: 'Storage permission denied');
+          Fluttertoast.showToast(msg: 'Permission denied. Check permissions in app settings');
           return false;
         }
       }
