@@ -38,6 +38,8 @@ dependencies:
   appwrite: ^13.1.1
   flutter_svg: ^2.0.17
   flutter_animate: ^4.5.2
+dependency_overrides:
+  flutter_web_auth_2: 4.0.1
 
 dev_dependencies:
   flutter_test:

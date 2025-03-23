@@ -37,7 +37,7 @@ class PaymentController extends GetxController {
     isProcessing.value = true;
 
     // Simulate network delay
-    await Future.delayed(Duration(seconds: 2));
+    // await Future.delayed(Duration(seconds: 2));
 
     // Random success/failure
     final success = DateTime.now().second % 2 == 0;
