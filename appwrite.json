@@ -340,14 +340,6 @@
             "documentSecurity": false,
             "attributes": [
                 {
-                    "key": "id",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 40,
-                    "default": null
-                },
-                {
                     "key": "qty",
                     "type": "integer",
                     "required": false,
@@ -362,29 +354,17 @@
                     "required": false,
                     "array": false,
                     "size": 40,
-                    "default": null
+                    "default": "pending"
                 },
                 {
-                    "key": "items",
+                    "key": "restaurant",
                     "type": "relationship",
                     "required": false,
                     "array": false,
-                    "relatedCollection": "67dd04a6002e67174a99",
-                    "relationType": "oneToMany",
+                    "relatedCollection": "67dd048f000c39c77100",
+                    "relationType": "oneToOne",
                     "twoWay": false,
-                    "twoWayKey": "67ddbe78003bfe532b1c",
-                    "onDelete": "setNull",
-                    "side": "parent"
-                },
-                {
-                    "key": "orders",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "67dd0515002b7198c687",
-                    "relationType": "oneToMany",
-                    "twoWay": false,
-                    "twoWayKey": "67ddbeb6000f0c7c4dd5",
+                    "twoWayKey": "67e061e8002a9e850f0c",
                     "onDelete": "setNull",
                     "side": "parent"
                 },
@@ -394,21 +374,33 @@
                     "required": false,
                     "array": false,
                     "relatedCollection": "67dd05340013b2b0b2c6",
-                    "relationType": "oneToMany",
+                    "relationType": "oneToOne",
                     "twoWay": false,
-                    "twoWayKey": "67ddbef0002d66d30461",
+                    "twoWayKey": "67e06224001cd8524afd",
                     "onDelete": "setNull",
                     "side": "parent"
                 },
                 {
-                    "key": "restaurant",
+                    "key": "orders",
                     "type": "relationship",
                     "required": false,
                     "array": false,
-                    "relatedCollection": "67dd048f000c39c77100",
-                    "relationType": "oneToMany",
+                    "relatedCollection": "67dd0515002b7198c687",
+                    "relationType": "oneToOne",
                     "twoWay": false,
-                    "twoWayKey": "67ddbf10002e14f9d2a4",
+                    "twoWayKey": "67e06279001f909b62de",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "items",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd04a6002e67174a99",
+                    "relationType": "oneToOne",
+                    "twoWay": false,
+                    "twoWayKey": "67e062a6002528915ef6",
                     "onDelete": "setNull",
                     "side": "parent"
                 }
@@ -430,22 +422,6 @@
             "enabled": true,
             "documentSecurity": false,
             "attributes": [
-                {
-                    "key": "id",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 40,
-                    "default": null
-                },
-                {
-                    "key": "createdAt",
-                    "type": "datetime",
-                    "required": false,
-                    "array": false,
-                    "format": "",
-                    "default": null
-                },
                 {
                     "key": "total_price",
                     "type": "double",
