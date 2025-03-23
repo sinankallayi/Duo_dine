@@ -90,7 +90,7 @@
                     "required": false,
                     "array": false,
                     "size": 30,
-                    "default": null
+                    "default": ""
                 },
                 {
                     "key": "description",
@@ -98,7 +98,7 @@
                     "required": false,
                     "array": false,
                     "size": 60,
-                    "default": null
+                    "default": ""
                 },
                 {
                     "key": "approved",
@@ -125,35 +125,11 @@
                     "default": 0
                 },
                 {
-                    "key": "id",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 50,
-                    "default": null
-                },
-                {
                     "key": "image",
                     "type": "string",
                     "required": false,
                     "array": false,
                     "size": 100,
-                    "default": null
-                },
-                {
-                    "key": "createdAt",
-                    "type": "datetime",
-                    "required": false,
-                    "array": false,
-                    "format": "",
-                    "default": null
-                },
-                {
-                    "key": "updatedAt",
-                    "type": "datetime",
-                    "required": false,
-                    "array": false,
-                    "format": "",
                     "default": null
                 }
             ],
@@ -302,26 +278,22 @@
                     "default": null
                 },
                 {
+                    "key": "users",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                },
+                {
                     "key": "items",
                     "type": "relationship",
                     "required": false,
                     "array": false,
                     "relatedCollection": "67dd04a6002e67174a99",
-                    "relationType": "oneToOne",
+                    "relationType": "manyToOne",
                     "twoWay": false,
                     "twoWayKey": "cart",
-                    "onDelete": "setNull",
-                    "side": "parent"
-                },
-                {
-                    "key": "users",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "67dd04dd002d7a8904c0",
-                    "relationType": "oneToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67de8fd900235a40d7be",
                     "onDelete": "setNull",
                     "side": "parent"
                 }
@@ -467,18 +439,6 @@
                     "default": null
                 },
                 {
-                    "key": "restaurant",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "67dd048f000c39c77100",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67ddbfd600301730920d",
-                    "onDelete": "setNull",
-                    "side": "parent"
-                },
-                {
                     "key": "createdAt",
                     "type": "datetime",
                     "required": false,
@@ -513,13 +473,21 @@
                 },
                 {
                     "key": "users",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "restaurant",
                     "type": "relationship",
                     "required": false,
                     "array": false,
-                    "relatedCollection": "67dd04dd002d7a8904c0",
-                    "relationType": "oneToOne",
+                    "relatedCollection": "67dd048f000c39c77100",
+                    "relationType": "oneToMany",
                     "twoWay": false,
-                    "twoWayKey": "67dfe44b0012794cbf07",
+                    "twoWayKey": "67e00c4b002344c5c1d7",
                     "onDelete": "setNull",
                     "side": "parent"
                 }
@@ -595,50 +563,37 @@
             "documentSecurity": false,
             "attributes": [
                 {
-                    "key": "isProcessing",
-                    "type": "boolean",
-                    "required": false,
-                    "array": false,
-                    "default": false
-                },
-                {
-                    "key": "cardNumber",
+                    "key": "users",
                     "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 20,
-                    "default": null
-                },
-                {
-                    "key": "expiryDate",
-                    "type": "string",
-                    "required": false,
+                    "required": true,
                     "array": false,
                     "size": 40,
                     "default": null
                 },
                 {
-                    "key": "cardHolderName",
-                    "type": "string",
+                    "key": "amount",
+                    "type": "double",
                     "required": false,
+                    "array": false,
+                    "min": -1.7976931348623157e+308,
+                    "max": 1.7976931348623157e+308,
+                    "default": 0
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "required": true,
                     "array": false,
                     "size": 20,
                     "default": null
                 },
                 {
-                    "key": "cvvCode",
+                    "key": "restaurant",
                     "type": "string",
-                    "required": false,
+                    "required": true,
                     "array": false,
-                    "size": 5,
+                    "size": 40,
                     "default": null
-                },
-                {
-                    "key": "isCvvFocused",
-                    "type": "boolean",
-                    "required": false,
-                    "array": false,
-                    "default": false
                 }
             ],
             "indexes": []
