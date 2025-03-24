@@ -83,14 +83,14 @@ const dbId = '67dd045f0027aa53f550';
 const funId = "67cd58e6002f3c0a38f4";
 
 // collections
-const restaurantCollection = '67dd048f000c39c77100';
-const itemsCollection = '67dd04a6002e67174a99';
-const cartCollection = "67dd04cd00213c02a849";
-const userCollection = "67dd04dd002d7a8904c0";
-const orderItemsCollection = "67dd04fc000ed6704e19";
-const ordersCollection = "67dd0515002b7198c687";
-const deliveryPersonsCollection = "67dd05340013b2b0b2c6";
-const paymentsCollection = "67dd0546003ce99e749f";
+const restaurantCollection = '679351de0007535ff696';
+const itemsCollection = '67935bfd001541bc5ae2';
+const cartCollection = "67935e61002d2eb9cece";
+const userCollection = "67935d0b000fcda8cb7f";
+const orderItemsCollection = "67935e14001fe833d665";
+const ordersCollection = "67935cf2002174bad91d";
+const deliveryPersonsCollection = "67c96b630024ab1bf027";
+const paymentsCollection = "67cd39f90020db666b4f";
 
 // storage
 const itemsBucketId = '67dd058f002e7a062527';

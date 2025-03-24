@@ -10,7 +10,7 @@ Databases databases = Databases(client!);
 const dbId = '67dd045f0027aa53f550';
 
 // collections
-const restaurantCollection = '67dd048f000c39c77100';
-const itemsCollection = '67dd04a6002e67174a99';
-const cartCollection = "67dd04cd00213c02a849";
-const userCollection = "67dd04dd002d7a8904c0";
+const restaurantCollection = '679351de0007535ff696';
+const itemsCollection = '67935bfd001541bc5ae2';
+const cartCollection = "67935e61002d2eb9cece";
+const userCollection = "67935d0b000fcda8cb7f";
