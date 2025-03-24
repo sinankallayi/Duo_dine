@@ -17,12 +17,12 @@
         },
         "auth": {
             "methods": {
-                "jwt": false,
-                "phone": false,
-                "invites": false,
-                "anonymous": false,
-                "email-otp": false,
-                "magic-url": false,
+                "jwt": true,
+                "phone": true,
+                "invites": true,
+                "anonymous": true,
+                "email-otp": true,
+                "magic-url": true,
                 "email-password": true
             },
             "security": {
@@ -37,66 +37,6 @@
             }
         }
     },
-    "functions": [
-        {
-            "$id": "67c3eb7a0017ccc05711",
-            "execute": [],
-            "name": "Payment",
-            "enabled": true,
-            "logging": true,
-            "runtime": "node-22",
-            "scopes": [
-                "users.read"
-            ],
-            "events": [],
-            "schedule": "",
-            "timeout": 15,
-            "entrypoint": "src/main.js",
-            "commands": "npm install",
-            "specification": "s-0.5vcpu-512mb",
-            "path": "functions/Payment"
-        },
-        {
-            "$id": "67cd58e6002f3c0a38f4",
-            "execute": [
-                "any"
-            ],
-            "name": "FCM",
-            "enabled": true,
-            "logging": true,
-            "runtime": "node-22",
-            "scopes": [
-                "users.read",
-                "databases.read",
-                "databases.write",
-                "collections.read",
-                "collections.write",
-                "attributes.read",
-                "attributes.write",
-                "indexes.read",
-                "indexes.write",
-                "documents.read",
-                "documents.write",
-                "targets.read",
-                "targets.write",
-                "providers.read",
-                "providers.write",
-                "messages.read",
-                "messages.write",
-                "topics.read",
-                "topics.write",
-                "subscribers.read",
-                "subscribers.write"
-            ],
-            "events": [],
-            "schedule": "",
-            "timeout": 15,
-            "entrypoint": "src/main.js",
-            "commands": "npm install",
-            "specification": "s-0.5vcpu-512mb",
-            "path": "functions/FCM"
-        }
-    ],
     "databases": [
         {
             "$id": "67dd045f0027aa53f550",
@@ -106,19 +46,14 @@
     ],
     "collections": [
         {
-            "$id": "679351de0007535ff696",
+            "$id": "67dd048f000c39c77100",
             "$permissions": [
                 "create(\"users\")",
                 "read(\"users\")",
                 "update(\"users\")",
                 "delete(\"users\")",
-                "create(\"any\")",
                 "read(\"any\")",
-                "update(\"any\")",
-                "create(\"user:admin\")",
-                "read(\"user:admin\")",
-                "update(\"user:admin\")",
-                "delete(\"user:admin\")"
+                "read(\"guests\")"
             ],
             "databaseId": "67dd045f0027aa53f550",
             "name": "restaurant",
@@ -130,7 +65,7 @@
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 50,
+                    "size": 20,
                     "default": null
                 },
                 {
@@ -138,15 +73,15 @@
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 150,
+                    "size": 60,
                     "default": null
                 },
                 {
                     "key": "location",
                     "type": "string",
-                    "required": false,
+                    "required": true,
                     "array": false,
-                    "size": 100,
+                    "size": 60,
                     "default": null
                 },
                 {
@@ -154,16 +89,16 @@
                     "type": "string",
                     "required": false,
                     "array": false,
-                    "size": 200,
-                    "default": null
+                    "size": 30,
+                    "default": ""
                 },
                 {
                     "key": "description",
                     "type": "string",
                     "required": false,
                     "array": false,
-                    "size": 200,
-                    "default": null
+                    "size": 60,
+                    "default": ""
                 },
                 {
                     "key": "approved",
@@ -175,7 +110,7 @@
                 {
                     "key": "phone",
                     "type": "string",
-                    "required": true,
+                    "required": false,
                     "array": false,
                     "size": 10,
                     "default": null
@@ -194,79 +129,21 @@
                     "type": "string",
                     "required": false,
                     "array": false,
-                    "size": 50,
-                    "default": null
-                },
-                {
-                    "key": "bank_account_number",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 20,
-                    "default": null
-                },
-                {
-                    "key": "ifsc_code",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 11,
-                    "default": null
-                },
-                {
-                    "key": "beneficiary_name",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 255,
-                    "default": null
-                },
-                {
-                    "key": "bank_name",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
                     "size": 100,
-                    "default": null
-                },
-                {
-                    "key": "razorpay_merchant_id",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 50,
-                    "default": null
-                },
-                {
-                    "key": "razorpay_contact_id",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 50,
                     "default": null
                 }
             ],
-            "indexes": [
-                {
-                    "key": "phone",
-                    "type": "unique",
-                    "status": "available",
-                    "attributes": [
-                        "phone"
-                    ],
-                    "orders": [
-                        "ASC"
-                    ]
-                }
-            ]
+            "indexes": []
         },
         {
-            "$id": "67935bfd001541bc5ae2",
+            "$id": "67dd04a6002e67174a99",
             "$permissions": [
                 "create(\"users\")",
                 "read(\"users\")",
                 "update(\"users\")",
-                "delete(\"users\")"
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")"
             ],
             "databaseId": "67dd045f0027aa53f550",
             "name": "items",
@@ -278,7 +155,7 @@
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 50,
+                    "size": 20,
                     "default": null
                 },
                 {
@@ -286,7 +163,7 @@
                     "type": "string",
                     "required": false,
                     "array": false,
-                    "size": 200,
+                    "size": 60,
                     "default": null
                 },
                 {
@@ -301,46 +178,9 @@
                 {
                     "key": "availability",
                     "type": "boolean",
-                    "required": false,
+                    "required": true,
                     "array": false,
-                    "default": true
-                },
-                {
-                    "key": "rating",
-                    "type": "double",
-                    "required": false,
-                    "array": false,
-                    "min": 0,
-                    "max": 5,
-                    "default": 0
-                },
-                {
-                    "key": "category",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 50,
                     "default": null
-                },
-                {
-                    "key": "imageId",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 100,
-                    "default": null
-                },
-                {
-                    "key": "restaurant",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "679351de0007535ff696",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "679de4260028caab2800",
-                    "onDelete": "setNull",
-                    "side": "parent"
                 },
                 {
                     "key": "featured",
@@ -348,175 +188,80 @@
                     "required": false,
                     "array": false,
                     "default": null
-                }
-            ],
-            "indexes": []
-        },
-        {
-            "$id": "67935d0b000fcda8cb7f",
-            "$permissions": [
-                "create(\"users\")",
-                "read(\"users\")",
-                "update(\"users\")",
-                "delete(\"users\")"
-            ],
-            "databaseId": "67dd045f0027aa53f550",
-            "name": "users",
-            "enabled": true,
-            "documentSecurity": false,
-            "attributes": [
+                },
                 {
-                    "key": "address",
-                    "type": "string",
+                    "key": "rating",
+                    "type": "double",
                     "required": false,
                     "array": false,
-                    "size": 200,
+                    "min": -1.7976931348623157e+308,
+                    "max": 1.7976931348623157e+308,
                     "default": null
-                },
-                {
-                    "key": "location",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 100,
-                    "default": null
-                },
-                {
-                    "key": "phone",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 10,
-                    "default": null
-                },
-                {
-                    "key": "name",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 50,
-                    "default": null
-                },
-                {
-                    "key": "token",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 500,
-                    "default": null
-                },
-                {
-                    "key": "role",
-                    "type": "string",
-                    "required": true,
-                    "array": false,
-                    "elements": [
-                        "customer",
-                        "delivery",
-                        "restaurent"
-                    ],
-                    "format": "enum",
-                    "default": null
-                }
-            ],
-            "indexes": []
-        },
-        {
-            "$id": "67935e14001fe833d665",
-            "$permissions": [
-                "create(\"any\")",
-                "create(\"users\")",
-                "read(\"users\")",
-                "update(\"users\")",
-                "delete(\"users\")"
-            ],
-            "databaseId": "67dd045f0027aa53f550",
-            "name": "order_Items",
-            "enabled": true,
-            "documentSecurity": false,
-            "attributes": [
-                {
-                    "key": "qty",
-                    "type": "integer",
-                    "required": true,
-                    "array": false,
-                    "min": -9223372036854775808,
-                    "max": 9223372036854775807,
-                    "default": null
-                },
-                {
-                    "key": "orders",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "67935cf2002174bad91d",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67c41b9600307db822b6",
-                    "onDelete": "setNull",
-                    "side": "parent"
-                },
-                {
-                    "key": "status",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "elements": [
-                        "pending",
-                        "delivered",
-                        "cancelled",
-                        "delivering",
-                        "cooking"
-                    ],
-                    "format": "enum",
-                    "default": "pending"
-                },
-                {
-                    "key": "deliveryPerson",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "67c96b630024ab1bf027",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67c96e6700115215362b",
-                    "onDelete": "setNull",
-                    "side": "parent"
                 },
                 {
                     "key": "restaurant",
                     "type": "relationship",
                     "required": false,
                     "array": false,
-                    "relatedCollection": "679351de0007535ff696",
+                    "relatedCollection": "67dd048f000c39c77100",
                     "relationType": "manyToOne",
                     "twoWay": false,
-                    "twoWayKey": "67c9797d0020995f7c81",
+                    "twoWayKey": "items",
                     "onDelete": "setNull",
                     "side": "parent"
                 },
                 {
-                    "key": "items",
-                    "type": "relationship",
+                    "key": "category",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 30,
+                    "default": null
+                },
+                {
+                    "key": "imageId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "id",
+                    "type": "string",
                     "required": false,
                     "array": false,
-                    "relatedCollection": "67935bfd001541bc5ae2",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67c97b6500386871acb7",
-                    "onDelete": "setNull",
-                    "side": "parent"
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "createdAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                },
+                {
+                    "key": "updatedAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
                 }
             ],
             "indexes": []
         },
         {
-            "$id": "67935e61002d2eb9cece",
+            "$id": "67dd04cd00213c02a849",
             "$permissions": [
                 "create(\"users\")",
                 "read(\"users\")",
                 "update(\"users\")",
-                "delete(\"users\")"
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")"
             ],
             "databaseId": "67dd045f0027aa53f550",
             "name": "cart",
@@ -526,10 +271,18 @@
                 {
                     "key": "quantity",
                     "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "min": -9223372036854775808,
+                    "max": 9223372036854775807,
+                    "default": null
+                },
+                {
+                    "key": "users",
+                    "type": "string",
                     "required": true,
                     "array": false,
-                    "min": 1,
-                    "max": 20,
+                    "size": 20,
                     "default": null
                 },
                 {
@@ -537,22 +290,10 @@
                     "type": "relationship",
                     "required": false,
                     "array": false,
-                    "relatedCollection": "67935bfd001541bc5ae2",
+                    "relatedCollection": "67dd04a6002e67174a99",
                     "relationType": "manyToOne",
                     "twoWay": false,
-                    "twoWayKey": "67b32b75002f00131cd6",
-                    "onDelete": "setNull",
-                    "side": "parent"
-                },
-                {
-                    "key": "users",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "67935d0b000fcda8cb7f",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67b32b8b000a320b9462",
+                    "twoWayKey": "cart",
                     "onDelete": "setNull",
                     "side": "parent"
                 }
@@ -560,7 +301,7 @@
             "indexes": []
         },
         {
-            "$id": "67935cf2002174bad91d",
+            "$id": "67dd04dd002d7a8904c0",
             "$permissions": [
                 "create(\"users\")",
                 "read(\"users\")",
@@ -568,22 +309,123 @@
                 "delete(\"users\")"
             ],
             "databaseId": "67dd045f0027aa53f550",
-            "name": "orders",
+            "name": "user",
             "enabled": true,
             "documentSecurity": false,
             "attributes": [
+                {
+                    "key": "role",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67dd04fc000ed6704e19",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "orderitems",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "qty",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "min": -9223372036854775808,
+                    "max": 9223372036854775807,
+                    "default": null
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": "pending"
+                },
                 {
                     "key": "restaurant",
                     "type": "relationship",
                     "required": false,
                     "array": false,
-                    "relatedCollection": "679351de0007535ff696",
-                    "relationType": "manyToMany",
+                    "relatedCollection": "67dd048f000c39c77100",
+                    "relationType": "oneToOne",
                     "twoWay": false,
-                    "twoWayKey": "67c40e9000075a01bbc0",
+                    "twoWayKey": "67e061e8002a9e850f0c",
                     "onDelete": "setNull",
                     "side": "parent"
                 },
+                {
+                    "key": "deliverypersonnel",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd05340013b2b0b2c6",
+                    "relationType": "oneToOne",
+                    "twoWay": false,
+                    "twoWayKey": "67e06224001cd8524afd",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "orders",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd0515002b7198c687",
+                    "relationType": "oneToOne",
+                    "twoWay": false,
+                    "twoWayKey": "67e06279001f909b62de",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "items",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd04a6002e67174a99",
+                    "relationType": "oneToOne",
+                    "twoWay": false,
+                    "twoWayKey": "67e062a6002528915ef6",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67dd0515002b7198c687",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")",
+                "read(\"any\")",
+                "read(\"guests\")",
+                "create(\"label:customer\")",
+                "read(\"label:customer\")",
+                "update(\"label:customer\")",
+                "delete(\"label:customer\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "orders",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
                 {
                     "key": "total_price",
                     "type": "double",
@@ -598,34 +440,50 @@
                     "type": "string",
                     "required": false,
                     "array": false,
-                    "size": 50,
+                    "size": 40,
                     "default": null
-                },
-                {
-                    "key": "users",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "67935d0b000fcda8cb7f",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67c4163d003acebd33e5",
-                    "onDelete": "setNull",
-                    "side": "parent"
                 },
                 {
                     "key": "complaints",
                     "type": "string",
                     "required": false,
                     "array": false,
-                    "size": 1000,
+                    "size": 80,
                     "default": null
+                },
+                {
+                    "key": "users",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "restaurant",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "67dd048f000c39c77100",
+                    "relationType": "oneToMany",
+                    "twoWay": false,
+                    "twoWayKey": "67e00c4b002344c5c1d7",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "user",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": "customer"
                 }
             ],
             "indexes": []
         },
         {
-            "$id": "67c96b630024ab1bf027",
+            "$id": "67dd05340013b2b0b2c6",
             "$permissions": [
                 "create(\"users\")",
                 "read(\"users\")",
@@ -633,7 +491,7 @@
                 "delete(\"users\")"
             ],
             "databaseId": "67dd045f0027aa53f550",
-            "name": "delivery_person",
+            "name": "deliverypersonnel",
             "enabled": true,
             "documentSecurity": false,
             "attributes": [
@@ -647,7 +505,7 @@
                 {
                     "key": "phone",
                     "type": "string",
-                    "required": true,
+                    "required": false,
                     "array": false,
                     "size": 10,
                     "default": null
@@ -657,7 +515,7 @@
                     "type": "string",
                     "required": false,
                     "array": false,
-                    "size": 200,
+                    "size": 40,
                     "default": null
                 },
                 {
@@ -665,14 +523,22 @@
                     "type": "string",
                     "required": false,
                     "array": false,
-                    "size": 50,
+                    "size": 20,
+                    "default": null
+                },
+                {
+                    "key": "id",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
                     "default": null
                 }
             ],
             "indexes": []
         },
         {
-            "$id": "67cd39f90020db666b4f",
+            "$id": "67dd0546003ce99e749f",
             "$permissions": [
                 "create(\"users\")",
                 "read(\"users\")",
@@ -685,36 +551,12 @@
             "documentSecurity": false,
             "attributes": [
                 {
-                    "key": "status",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 20,
-                    "default": null
-                },
-                {
                     "key": "users",
-                    "type": "relationship",
-                    "required": false,
+                    "type": "string",
+                    "required": true,
                     "array": false,
-                    "relatedCollection": "67935d0b000fcda8cb7f",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67cd3a1a000355052ece",
-                    "onDelete": "setNull",
-                    "side": "parent"
-                },
-                {
-                    "key": "restaurant",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "679351de0007535ff696",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67cd3a230036cd9f0562",
-                    "onDelete": "setNull",
-                    "side": "parent"
+                    "size": 40,
+                    "default": null
                 },
                 {
                     "key": "amount",
@@ -723,6 +565,22 @@
                     "array": false,
                     "min": -1.7976931348623157e+308,
                     "max": 1.7976931348623157e+308,
+                    "default": 0
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                },
+                {
+                    "key": "restaurant",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 40,
                     "default": null
                 }
             ],
@@ -731,31 +589,26 @@
     ],
     "buckets": [
         {
-            "$id": "679a10ac0016e3bd6f02",
+            "$id": "67dd058f002e7a062527",
             "$permissions": [
                 "create(\"users\")",
                 "read(\"users\")",
                 "update(\"users\")",
                 "delete(\"users\")",
-                "read(\"any\")"
+                "read(\"any\")",
+                "read(\"guests\")"
             ],
             "fileSecurity": false,
             "name": "items",
             "enabled": true,
-            "maximumFileSize": 5000000000,
-            "allowedFileExtensions": [],
+            "maximumFileSize": 50000000,
+            "allowedFileExtensions": [
+                "jpg",
+                "png"
+            ],
             "compression": "none",
             "encryption": true,
             "antivirus": true
-        }
-    ],
-    "topics": [
-        {
-            "$id": "67cd427b0039b72f15f7",
-            "name": "notifications",
-            "subscribe": [
-                "users"
-            ]
         }
     ]
 }
