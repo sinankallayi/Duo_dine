@@ -78,9 +78,14 @@ class OrdersScreen extends GetView<OrdersController> {
                       ),
                       Text(
                         "Compalints: ${orderItem.value.orders.complaints ?? "No complaints"}",
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
                       ),
                       Divider(),
-                      SizedBox(height: 10,)
+                      SizedBox(
+                        height: 10,
+                      )
                     ],
                   ),
                 ),
