@@ -46,7 +46,6 @@ class ItemsScreen extends GetView<ItemsScreenController> {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
             children: [
               SvgPicture.asset('assets/Illustrations/no_data.svg', height: 100),
               const SizedBox(height: 10),
@@ -55,10 +54,11 @@ class ItemsScreen extends GetView<ItemsScreenController> {
           ),
         );
       }
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
+      // Using CustomScrollView and slivers to avoid RenderFlex overflow.
+      return CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
@@ -71,122 +71,121 @@ class ItemsScreen extends GetView<ItemsScreenController> {
                 ),
               ],
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columnSpacing: 20,
-                headingRowColor: WidgetStateProperty.all(Colors.grey[200]),
-                dataRowMaxHeight: 50,
-                columns: const [
-                  // DataColumn(label: Text('Image')),
-                  DataColumn(label: Text('Name')),
-                  DataColumn(label: Text('Category')),
-                  DataColumn(label: Text('Price')),
-                  DataColumn(label: Text('Status')),
-                  DataColumn(label: Text('Actions')),
-                ],
-                rows: List.generate(controller.items.length, (index) {
-                  return DataRow(cells: [
-                    // DataCell(
-                    //   Container(
-                    //     decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(10),
-                    //       color: Colors.grey,
-                    //     ),
-                    //     clipBehavior: Clip.hardEdge,
-                    //     child: Image.network(
-                    //       'https://cloud.appwrite.io/v1/storage/buckets/$itemsBucketId/files/${controller.items[index]!.imageId}/view?project=restro',
-                    //       width: 50,
-                    //       height: 50,
-                    //       fit: BoxFit.cover,
-                    //     ),
-                    //   ),
-                    // ),
-                    DataCell(Text(controller.items[index]!.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold))),
-                    DataCell(Text(controller.items[index]!.category)),
-                    DataCell(Text("₹${controller.items[index]!.price}")),
-                    DataCell(
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 4, horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: controller.items[index]!.availability
-                              ? const Color(0xff22B55A)
-                              : const Color(0xffED4343),
-                          borderRadius: BorderRadius.circular(90),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 10),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1, // Adjust the number of columns as needed
+                childAspectRatio: 2, // Adjust the aspect ratio as needed
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final item = controller.items[index]!;
+                  return Card(
+                    elevation: 2,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(item.category),
+                              const SizedBox(height: 8),
+                              Text("₹${item.price}"),
+                              const Spacer(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      minimumSize: const Size(50, 30),
+                                    ),
+                                    onPressed: () {
+                                      controller
+                                          .viewItem(getImageUrl(item.imageId));
+                                    },
+                                    child: const Text(
+                                      'View',
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      minimumSize: const Size(50, 30),
+                                    ),
+                                    onPressed: () {
+                                      controller.editItem(item);
+                                    },
+                                    child: const Text(
+                                      'Edit',
+                                      style: TextStyle(color: Colors.orange),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      minimumSize: const Size(50, 30),
+                                    ),
+                                    onPressed: () {
+                                      controller.deleteItem(item);
+                                    },
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Text(
-                          controller.items[index]!.availability
-                              ? 'Available'
-                              : 'Unavailable',
-                          style: const TextStyle(color: Colors.white),
+                        // Show the indicator in the top right based on availability.
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
+                            decoration: BoxDecoration(
+                              color: item.availability
+                                  ? const Color(0xff22B55A)
+                                  : const Color(0xffED4343),
+                              borderRadius: BorderRadius.circular(90),
+                            ),
+                            child: Text(
+                              item.availability ? 'Available' : 'Unavailable',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    DataCell(
-                      Row(
-                        children: [
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(50, 30),
-                            ),
-                            onPressed: () {
-                              // View action
-                              controller.viewItem(
-                                  // "https://cloud.appwrite.io/v1/storage/buckets/$itemsBucketId/files/${controller.items[index]!.imageId}/view?project=restro");
-                                  getImageUrl(controller.items[index]!.imageId)
-                              );
-                            },
-                            child: const Text(
-                              'View',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(50, 30),
-                            ),
-                            onPressed: () {
-                              // Update action
-                              controller.editItem(controller.items[index]!);
-                            },
-                            child: const Text(
-                              'Edit',
-                              style: TextStyle(color: Colors.orange),
-                            ),
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(50, 30),
-                            ),
-                            onPressed: () {
-                              // Delete action
-                              controller.deleteItem(controller.items[index]!);
-                            },
-                            child: const Text(
-                              'Delete',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ]);
-                }),
+                  );
+                },
+                childCount: controller.items.length,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     });
   }
 }
 
-// New widget for the add item modal bottom sheet
+// Bottom modal widget for adding a new item.
 class _BottomModalAddItem extends StatelessWidget {
   const _BottomModalAddItem({required this.controller});
 
@@ -200,7 +199,6 @@ class _BottomModalAddItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Form fields for adding a new item
             _buildTextField(
               controller: controller.dishNameController,
               label: 'Dish Name',
