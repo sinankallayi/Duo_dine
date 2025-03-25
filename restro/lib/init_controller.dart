@@ -57,7 +57,7 @@ class InitController extends GetxController {
             await account.createPushTarget(
               targetId: user!.$id,
               identifier: token!,
-              providerId: '67cd4265001be6b31f90',
+              providerId: notifcationProviderId,
             );
             await messaging.createSubscriber(
               topicId: notifcationsTopic,

@@ -96,6 +96,7 @@ const paymentsCollection = "67cd39f90020db666b4f";
 const itemsBucketId = '67dd058f002e7a062527';
 
 // topics
+const notifcationProviderId = "67e2a18f0022e80e9f47";
 const notifcationsTopic = "67cd427b0039b72f15f7";
 
 //paths

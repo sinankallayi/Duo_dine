@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "141890461441",
-    "project_id": "duo-dine",
-    "storage_bucket": "duo-dine.firebasestorage.app"
+    "project_number": "568526317477",
+    "project_id": "duo-dine-2025",
+    "storage_bucket": "duo-dine-2025.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:141890461441:android:856a25ed8c33a9bca5c500",
+        "mobilesdk_app_id": "1:568526317477:android:29ae2daf1cae93d7252a4c",
         "android_client_info": {
           "package_name": "com.vectocrop.restro"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA-DgeDwPXRlPKfnEWAa8c7vPZ_zoWlRx4"
+          "current_key": "AIzaSyC_idBkTRqCr7Sq7vTAAlzeO_5elTq7EJI"
         }
       ],
       "services": {

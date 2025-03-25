@@ -50,11 +50,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA-DgeDwPXRlPKfnEWAa8c7vPZ_zoWlRx4',
-    appId: '1:141890461441:android:856a25ed8c33a9bca5c500',
-    messagingSenderId: '141890461441',
-    projectId: 'duo-dine',
-    storageBucket: 'duo-dine.firebasestorage.app',
+    apiKey: 'AIzaSyC_idBkTRqCr7Sq7vTAAlzeO_5elTq7EJI',
+    appId: '1:568526317477:android:29ae2daf1cae93d7252a4c',
+    messagingSenderId: '568526317477',
+    projectId: 'duo-dine-2025',
+    storageBucket: 'duo-dine-2025.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
