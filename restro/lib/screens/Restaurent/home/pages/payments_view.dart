@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/screens/Restaurent/home/controllers/payment_controller.dart';
 import 'package:get/get.dart';
-import 'package:restro_admin/app/modules/home/controllers/payment_controller.dart';
 
 class PaymentsView extends StatelessWidget {
   final PaymentController controller = Get.put(PaymentController());

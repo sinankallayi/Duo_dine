@@ -13,6 +13,7 @@ void main() {
 
   runApp(
     GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "Duo Dine Admin",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
