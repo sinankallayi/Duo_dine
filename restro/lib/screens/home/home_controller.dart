@@ -21,10 +21,13 @@ class HomeScreenController extends GetxController {
           databaseId: dbId,
           collectionId: restaurantCollection,
           queries: [Query.equal("approved", true)]);
+      print("Fetched Restaurants: ${response.documents.length}");
+      restaurants.assignAll(response.documents.map((e) => Restaurant.fromJson(e.data)).toList());
 
-      restaurants.value =
-          response.documents.map((e) => Restaurant.fromJson(e.data)).toList();
+      // restaurants.value =
+      //     response.documents.map((e) => Restaurant.fromJson(e.data)).toList();
     } on AppwriteException catch (e) {
+      print("Appwrite Error: ${e.message}");
       Fluttertoast.showToast(msg: e.message!);
     }
   }

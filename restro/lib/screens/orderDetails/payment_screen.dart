@@ -13,6 +13,7 @@ class PaymentScreen extends GetView<PaymentController> {
     return Scaffold(
       appBar: AppBar(title: const Text('Payment')),
       body: SingleChildScrollView(
+        reverse: true,
         child: Column(
           children: [
             Obx(

@@ -15,6 +15,7 @@ class OrderDetailsController extends GetxController {
 
   @override
   void onInit() {
+    if(user == null) return;
     getCartItems();
     getOrders();
     super.onInit();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/functions/restaurant.dart';
+import 'package:foodly_ui/screens/splash/splash_view.dart';
 import 'package:get/get.dart';
 
 import '../../../functions/location.dart';
@@ -25,23 +26,20 @@ class RestRegisterScreen extends GetView<RestRegisterController> {
             children: <Widget>[
               _buildTextFormField(
                 label: 'Name *',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter the restaurant name'
-                    : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Please enter the restaurant name' : null,
                 onSaved: (value) => controller.name.value = value!,
               ),
               _buildTextFormField(
                 label: 'Address *',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter the address'
-                    : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Please enter the address' : null,
                 onSaved: (value) => controller.address.value = value!,
               ),
               _buildTextFormField(
                 label: 'Phone *',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter the phone number'
-                    : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Please enter the phone number' : null,
                 onSaved: (value) => controller.phone.value = value!,
               ),
               _buildLocationField(),
@@ -64,6 +62,18 @@ class RestRegisterScreen extends GetView<RestRegisterController> {
               ElevatedButton(
                 onPressed: controller.register,
                 child: const Text('Register'),
+              ),
+              const SizedBox(height: defaultPadding * 2),
+              const Text("OR", textAlign: TextAlign.center),
+              const SizedBox(height: defaultPadding * 2),
+              OutlinedButton(
+                onPressed: () async {
+                  // Navigate to customer sign-in screen
+                  await localStorage.write('isCustomer', true);
+                  // user = await account.get();
+                  Get.offAll(const SplashView());
+                },
+                child: const Text('Sign in as Customer'),
               ),
             ],
           ),
@@ -110,8 +120,7 @@ class RestRegisterScreen extends GetView<RestRegisterController> {
           icon: const Icon(Icons.location_on),
         ),
       ),
-      validator: (value) =>
-          value == null || value.isEmpty ? 'Please enter the location' : null,
+      validator: (value) => value == null || value.isEmpty ? 'Please enter the location' : null,
       onSaved: (value) => controller.location.value = value!,
     );
   }
@@ -119,17 +128,12 @@ class RestRegisterScreen extends GetView<RestRegisterController> {
   Widget _buildTagsChips() {
     return Wrap(
       spacing: 8.0,
-      children: controller.tags.value
-          .split(' ')
-          .where((tag) => tag.isNotEmpty)
-          .map((tag) {
+      children: controller.tags.value.split(' ').where((tag) => tag.isNotEmpty).map((tag) {
         return Chip(
           label: Text(tag),
           onDeleted: () {
-            controller.tags.value = controller.tags.value
-                .split(' ')
-                .where((t) => t != tag)
-                .join(' ');
+            controller.tags.value =
+                controller.tags.value.split(' ').where((t) => t != tag).join(' ');
           },
         );
       }).toList(),

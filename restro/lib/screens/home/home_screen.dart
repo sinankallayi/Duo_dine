@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:foodly_ui/data.dart';
 import 'package:foodly_ui/screens/details/details_screen.dart';
 import 'package:foodly_ui/screens/home/home_controller.dart';
 import 'package:foodly_ui/screens/search/search_screen.dart';
@@ -29,6 +31,21 @@ class HomeScreen extends GetView<HomeScreenController> {
             .slide(),
         backgroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(children: [
+              if(user != null )const Icon(
+                CupertinoIcons.person,
+                color: Colors.black,
+              ),
+              Text(
+                user?.name ?? "Guest",
+                style: Theme.of(context).textTheme.bodyLarge,
+              )
+            ]),
+          )
+        ],
       ),
       // appBar: AppBar(
       //   // leading: const SizedBox(),
@@ -116,8 +133,7 @@ class HomeScreen extends GetView<HomeScreenController> {
               // For demo we use 4 items
 
               Obx(() => ListView.builder(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: defaultPadding),
+                    padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: controller.restaurants.length,
@@ -136,8 +152,7 @@ class HomeScreen extends GetView<HomeScreenController> {
                         updatedAt: controller.restaurants[index].updatedAt,
                         images: [],
                         press: () {
-                          Get.to(() => DetailsScreen(
-                              restaurant: controller.restaurants[index]));
+                          Get.to(() => DetailsScreen(restaurant: controller.restaurants[index]));
                         },
                       );
                     },

@@ -34,7 +34,7 @@ class InitController extends GetxController {
     log('Checking user info');
     try {
       await getUserInfo();
-
+      
       await Future.delayed(const Duration(seconds: 2));
 
       if (user != null) {

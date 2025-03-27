@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:foodly_ui/data.dart';
 import 'package:foodly_ui/models/menu_items_model.dart';
 import 'package:foodly_ui/screens/addToOrder/add_to_order_controller.dart';
+import 'package:foodly_ui/screens/auth/components/show_login_bottomsheet.dart';
 import 'package:get/get.dart';
 
-import '../../constants.dart';
+import '/constants.dart';
 import 'components/info.dart';
 
 // ignore: must_be_immutable
@@ -91,15 +93,12 @@ class AddToOrderScrreen extends GetView<AddToOrderController> {
                               shape: const CircleBorder(),
                               padding: EdgeInsets.zero,
                             ),
-                            child:
-                                const Icon(Icons.remove, color: Colors.white),
+                            child: const Icon(Icons.remove, color: Colors.white),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: defaultPadding),
-                          child: Obx(() => Text(
-                              controller.numOfItems.toString().padLeft(2, "0"),
+                          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                          child: Obx(() => Text(controller.numOfItems.toString().padLeft(2, "0"),
                               style: Theme.of(context).textTheme.titleLarge)),
                         ),
                         SizedBox(
@@ -110,8 +109,7 @@ class AddToOrderScrreen extends GetView<AddToOrderController> {
                               if (controller.numOfItems.value < 20) {
                                 controller.numOfItems.value++;
                               } else {
-                                Fluttertoast.showToast(
-                                    msg: "You can't order more than 20 items");
+                                Fluttertoast.showToast(msg: "You can't order more than 20 items");
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -129,7 +127,12 @@ class AddToOrderScrreen extends GetView<AddToOrderController> {
                     const SizedBox(height: defaultPadding),
                     ElevatedButton(
                       onPressed: () {
-                        controller.addOrder();
+                        if (user == null) {
+                          showLoginBottomSheet(context);
+                          return;
+                        } else {
+                          controller.addOrder();
+                        }
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(
@@ -137,7 +140,7 @@ class AddToOrderScrreen extends GetView<AddToOrderController> {
                         //   ),
                         // );
                       },
-                        child: Obx(() => Text(
+                      child: Obx(() => Text(
                           "Add to Order (₹${(item.price * controller.numOfItems.value).toStringAsFixed(2)})")),
                     ),
                   ],
