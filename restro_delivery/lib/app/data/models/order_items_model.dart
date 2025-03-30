@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/models/delivery_person_model.dart';
-import 'package:foodly_ui/models/enums/order_status.dart';
-import 'package:foodly_ui/models/menu_items_model.dart';
-import 'package:foodly_ui/models/order_model.dart';
-import 'package:foodly_ui/models/restaurant_model.dart';
 import 'package:get/get.dart';
 
-import 'enums/delivery_status.dart';
+import '../enums/delivery_status.dart';
+import '../enums/order_status.dart';
+import '/app/data/models/delivery_person_model.dart';
+import '/app/data/models/menu_items_model.dart';
+import '/app/data/models/order_model.dart';
+import '/app/data/models/restaurant_model.dart';
 
 class OrderItemsModel {
   String $id;

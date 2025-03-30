@@ -8,17 +8,17 @@ import 'package:foodly_ui/screens/Restaurent/home/widgets/delivery_persons_list.
 import 'package:get/get.dart';
 import 'dart:convert';
 
+import '../../../../models/enums/delivery_status.dart';
+import '../../../../models/enums/order_status.dart';
+
 class OrdersController extends GetxController {
   RxBool isLoading = true.obs;
   RxBool deliveyIsLoading = true.obs;
   RxList<OrderItemsModel> orderItems = <OrderItemsModel>[].obs;
   RxList<DeliveryPersonModel> deliveryPersons = <DeliveryPersonModel>[].obs;
+  RxList<DeliveryPersonModel> filteredDeliveryPersons = <DeliveryPersonModel>[].obs;
 
   @override
-  void onInit() {
-    super.onInit();
-  }
-
   onReady() {
     getOrders();
     super.onReady();
@@ -35,21 +35,77 @@ class OrdersController extends GetxController {
       collectionId: orderItemsCollection,
       queries: [
         Query.equal('restaurant', restaurant.value!.id),
+        Query.notEqual('status', OrderStatus.returned.value),
+        Query.notEqual('status', OrderStatus.refunded.value),
+        Query.notEqual('status', OrderStatus.orderFailed.value),
+        Query.notEqual('status', OrderStatus.orderCompleted.value),
         Query.orderDesc('\$createdAt'),
       ],
     );
 
-    print(result.documents);
-
-    orderItems = result.documents
-        .map((e) => OrderItemsModel.fromJson(e.data))
-        .toList()
-        .obs;
+    orderItems = result.documents.map((e) => OrderItemsModel.fromJson(e.data)).toList().obs;
 
     isLoading.value = false;
   }
 
-  Future<void> updateOrderStatus(id, String s, int index) async {
+  Future<void> updateOrderStatus(OrderItemsModel orderItem, OrderStatus nextStatus) async {
+    print("updating order status to ${nextStatus.value}");
+    try {
+      await db.updateDocument(
+        databaseId: dbId,
+        collectionId: orderItemsCollection,
+        documentId: orderItem.$id,
+        data: {
+          "status": nextStatus.value,
+        },
+      );
+
+      await functions.createExecution(
+        functionId: funId,
+        body: jsonEncode({
+          'title': 'Order Status Updated',
+          'body': 'The status of your order has been updated to $nextStatus',
+          'users': getId(orderItem.orders.user),
+        }),
+        path: sendMsgPath,
+      );
+    } on AppwriteException catch (e) {
+      print(e.message);
+    }
+
+    getOrders();
+  }
+
+  Future<void> updateDeliveryPersonStatus(
+      OrderItemsModel orderItem, DeliveryStatus nextStatus) async {
+    print("updating order status to ${nextStatus.value}");
+    try {
+      await db.updateDocument(
+        databaseId: dbId,
+        collectionId: deliveryPersonsCollection,
+        documentId: orderItem.deliveryPerson!.$id,
+        data: {'deliveryStatus': nextStatus.value},
+      );
+
+      await functions.createExecution(
+        functionId: funId,
+        body: jsonEncode({
+          'title': 'Delivery Status Updated',
+          'body': 'The status of your delivery has been updated to $nextStatus',
+          'users': getId(orderItem.orders.user),
+        }),
+        path: sendMsgPath,
+      );
+    } on AppwriteException catch (e) {
+      print(e.message);
+    }
+
+    getOrders();
+  }
+
+  Future<void> updateOrderStatusOld(id, String s, int index) async {
+    print("updating order status to $s");
+    isLoading.value = true;
     try {
       await db.updateDocument(
         databaseId: dbId,
@@ -72,24 +128,50 @@ class OrdersController extends GetxController {
     } on AppwriteException catch (e) {
       print(e.message);
     }
-
+    isLoading.value = false;
     getOrders();
   }
 
-  Future<void> assingDeliveryPerson(String $id, index) async {
+  Future<void> assignDeliveryPerson(
+      OrderItemsModel orderItemsModel, DeliveryPersonModel deliveryPerson) async {
+    await db.updateDocument(
+      databaseId: dbId,
+      collectionId: orderItemsCollection,
+      documentId: orderItemsModel.$id,
+      data: {
+        "deliveryPerson": deliveryPerson.$id,
+      },
+    );
+
+    await db.updateDocument(
+      databaseId: dbId,
+      collectionId: deliveryPersonsCollection,
+      documentId: deliveryPerson.$id,
+      data: {'deliveryStatus': DeliveryStatus.newOrderAssigned.value},
+    );
+
+    getOrders();
+    Get.back();
+  }
+
+  Future<void> showDeliveryPersons(OrderItemsModel orderItemsModel) async {
     // assign delivery person
     // show bottom sheet with delivery person list
 
-    Get.showOverlay(asyncFunction: () async {
-      deliveyIsLoading.value = true;
+    Get.showOverlay(
+      asyncFunction: () async {
+        deliveyIsLoading.value = true;
 
-      await getDeliveryPersons();
-    });
+        await getDeliveryPersons();
+      },
+      loadingWidget: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
 
     Get.bottomSheet(
       DeliveryPersonsList(
-        $id: $id,
-        index: index,
+        orderItemsModel: orderItemsModel,
       ),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -107,11 +189,9 @@ class OrdersController extends GetxController {
       collectionId: deliveryPersonsCollection,
     );
 
-    deliveryPersons = result.documents
-        .map((e) => DeliveryPersonModel.fromJson(e.data))
-        .toList()
-        .obs;
-
+    deliveryPersons =
+        result.documents.map((e) => DeliveryPersonModel.fromJson(e.data)).toList().obs;
+    filteredDeliveryPersons.value = deliveryPersons;
     deliveyIsLoading.value = false;
   }
 
@@ -119,9 +199,8 @@ class OrdersController extends GetxController {
     deliveyIsLoading.value = true;
 
     final query = value.toLowerCase();
-    deliveryPersons.value = deliveryPersons
-        .where((element) => element.name.toLowerCase().contains(query))
-        .toList();
+    filteredDeliveryPersons.value =
+        deliveryPersons.where((element) => element.name.toLowerCase().contains(query)).toList();
 
     deliveyIsLoading.value = false;
   }

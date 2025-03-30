@@ -19,29 +19,29 @@ class AddToOrderController extends GetxController {
   }
 
   // Verify or create user document
-  Future<bool> _verifyUserDocument() async {
-    try {
-      await db.getDocument(
-        databaseId: dbId,
-        collectionId: userCollection,
-        documentId: user!.$id,
-      );
-      return true;
-    } on AppwriteException catch (e) {
-      if (e.code == 404) {
-        await db.createDocument(
-          databaseId: dbId,
-          collectionId: userCollection,
-          documentId: user!.$id,
-          data: {"role": "customer"},
-        );
-        return true;
-      }
-      print(e.message);
-      _handleError(e.message!);
-      return false;
-    }
-  }
+  // Future<bool> _verifyUserDocument() async {
+  //   try {
+  //     await db.getDocument(
+  //       databaseId: dbId,
+  //       collectionId: userCollection,
+  //       documentId: user!.$id,
+  //     );
+  //     return true;
+  //   } on AppwriteException catch (e) {
+  //     if (e.code == 404) {
+  //       await db.createDocument(
+  //         databaseId: dbId,
+  //         collectionId: userCollection,
+  //         documentId: user!.$id,
+  //         data: {"role": "customer"},
+  //       );
+  //       return true;
+  //     }
+  //     print(e.message);
+  //     _handleError(e.message!);
+  //     return false;
+  //   }
+  // }
 
   Future<void> addOrder() async {
     if (item == null) {
@@ -58,7 +58,7 @@ class AddToOrderController extends GetxController {
 
     try {
       // Verify user document exists
-      if (!await _verifyUserDocument()) return;
+      // if (!await _verifyUserDocument()) return;
 
       print("Adding order to cart");
 

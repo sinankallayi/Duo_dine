@@ -1,46 +1,48 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:get/get.dart';
 import '/app/data/constants.dart';
 import '/app/routes/app_pages.dart';
 
+enum AuthState { loading, login, register, home }
+
 class AuthController extends GetxController {
-  final count = 0.obs;
-  @override
-  Future<void> onInit() async {
+  var authState = AuthState.loading.obs;
+  void checkUser() async {
     try {
       user = await account.get();
     } on Exception catch (e) {
       print(e);
     }
-
+    print("RAZI ${user?.email}");
+    print("RAZI: labels ${user?.labels.contains('customer')}");
     if (user == null) {
-      try {
-        await account.createEmailPasswordSession(
-          email: 'admin@duodine.com',
-          password: "123456789",
-        );
-
-        user = await account.get();
-      } on Exception catch (e) {
-        print(e);
-      }
+      showLogin();
+    } else {
+      showHome();
     }
+  }
 
-    if (user != null) {
-      print(user!.email);
-      Get.offAndToNamed(Routes.HOME);
+  void showLogin() {
+    authState.value = AuthState.login;
+  }
+
+  void showRegister() {
+    authState.value = AuthState.register;
+  }
+
+  void showHome() {
+    authState.value = AuthState.home;
+    Get.offAllNamed(Routes.HOME);
+  }
+
+  Future<void> logout() async {
+    try {
+      await account.deleteSession(sessionId: 'current');
+      print('Logout successful');
+      user = null;
+    } on AppwriteException catch (e) {
+      user = null;
+      print('Logout failed: ${e.message}');
     }
-    super.onInit();
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

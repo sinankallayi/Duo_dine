@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import '../../../functions/auth.dart';
+import '../../../functions/validations.dart';
 import '/app/modules/auth/controllers/auth_controller.dart';
 
 class RegisterView extends GetView<AuthController> {
@@ -11,10 +13,7 @@ class RegisterView extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text("Sign Up"),
-      ),
+      appBar: AppBar(backgroundColor: Colors.white, title: const Text("Sign Up")),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -27,26 +26,31 @@ class RegisterView extends GetView<AuthController> {
               ),
 
               // Sign Up Form
-              const SignUpForm(),
+              SignUpForm(
+                onSubmit: (String fullName, String phone, String email, String password) async {
+                  await register(name: fullName, email: email, phone: phone, password: password);
+                  controller.checkUser();
+                },
+              ),
               const SizedBox(height: 16),
 
               // Already have account
               Center(
                 child: Text.rich(
                   TextSpan(
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontWeight: FontWeight.w500),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w500),
                     text: "Already have account? ",
                     children: <TextSpan>[
                       TextSpan(
                         text: "Sign In",
                         style: const TextStyle(color: Color(0xFF22A45D)),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // Navigate to Sign In Screen
-                          },
+                        recognizer:
+                            TapGestureRecognizer()
+                              ..onTap = () {
+                                // Navigate to Sign In Screen
+                              },
                       ),
                     ],
                   ),
@@ -62,9 +66,8 @@ class RegisterView extends GetView<AuthController> {
               ),
               const SizedBox(height: 16),
               Center(
-                  child: Text("Or",
-                      style: TextStyle(
-                          color: Color(0xFF010F07).withOpacity(0.7)))),
+                child: Text("Or", style: TextStyle(color: Color(0xFF010F07).withOpacity(0.7))),
+              ),
               const SizedBox(height: 16),
 
               // Facebook
@@ -74,10 +77,7 @@ class RegisterView extends GetView<AuthController> {
                 color: const Color(0xFF395998),
                 icon: SvgPicture.asset(
                   'assets/icons/facebook.svg',
-                  colorFilter: const ColorFilter.mode(
-                    Color(0xFF395998),
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: const ColorFilter.mode(Color(0xFF395998), BlendMode.srcIn),
                 ),
               ),
               const SizedBox(height: 16),
@@ -87,9 +87,7 @@ class RegisterView extends GetView<AuthController> {
                 press: () {},
                 text: "Connect with Google",
                 color: const Color(0xFF4285F4),
-                icon: SvgPicture.asset(
-                  'assets/icons/google.svg',
-                ),
+                icon: SvgPicture.asset('assets/icons/google.svg'),
               ),
               const SizedBox(height: 16),
             ],
@@ -112,10 +110,7 @@ class WelcomeText extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           title,
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 16 / 2),
         Text(text, style: TextStyle(color: Color(0xFF868686))),
@@ -148,8 +143,7 @@ class SocalButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           padding: padding,
           backgroundColor: color,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8))),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
         ),
         onPressed: press,
         child: Row(
@@ -167,10 +161,9 @@ class SocalButton extends StatelessWidget {
             const Spacer(flex: 2),
             Text(
               text.toUpperCase(),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall!.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
             ),
             const Spacer(flex: 3),
           ],
@@ -181,7 +174,8 @@ class SocalButton extends StatelessWidget {
 }
 
 class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
+  final Function(String fullName, String phone, String email, String password) onSubmit;
+  const SignUpForm({super.key, required this.onSubmit});
 
   @override
   State<SignUpForm> createState() => _SignUpFormState();
@@ -189,6 +183,10 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
+  String? _fullName;
+  String? _phone;
+  String? _email;
+  String? _password;
 
   bool _obscureText = true;
 
@@ -200,33 +198,45 @@ class _SignUpFormState extends State<SignUpForm> {
         children: [
           // Full Name Field
           TextFormField(
-            onSaved: (value) {},
+            validator: requiredValidator.call,
+            onSaved: (value) {
+              _fullName = value;
+            },
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
               hintText: "Full Name",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFF3F2F2)),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFF3F2F2)),
-              ),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
             ),
           ),
           const SizedBox(height: 16),
 
+          TextFormField(
+            validator: phoneNumberValidator.call,
+            onSaved: (value) => _phone = value,
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.phone,
+            decoration: const InputDecoration(
+              hintText: "Phone Number",
+              border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
           // Email Field
           TextFormField(
-            onSaved: (value) {},
+            validator: emailValidator.call,
+            onSaved: (value) {
+              _email = value;
+            },
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
               hintText: "Email Address",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFF3F2F2)),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFF3F2F2)),
-              ),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
             ),
           ),
           const SizedBox(height: 16),
@@ -234,26 +244,26 @@ class _SignUpFormState extends State<SignUpForm> {
           // Password Field
           TextFormField(
             obscureText: _obscureText,
+            validator: passwordValidator.call,
+            onSaved: (value) {
+              _password = value;
+            },
             textInputAction: TextInputAction.next,
             onChanged: (value) {},
-            onSaved: (value) {},
             decoration: InputDecoration(
               hintText: "Password",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFF3F2F2)),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFF3F2F2)),
-              ),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
               suffixIcon: GestureDetector(
                 onTap: () {
                   setState(() {
                     _obscureText = !_obscureText;
                   });
                 },
-                child: _obscureText
-                    ? const Icon(Icons.visibility_off, color: Color(0xFF868686))
-                    : const Icon(Icons.visibility, color: Color(0xFF868686)),
+                child:
+                    _obscureText
+                        ? const Icon(Icons.visibility_off, color: Color(0xFF868686))
+                        : const Icon(Icons.visibility, color: Color(0xFF868686)),
               ),
             ),
           ),
@@ -264,35 +274,35 @@ class _SignUpFormState extends State<SignUpForm> {
             obscureText: _obscureText,
             decoration: InputDecoration(
               hintText: "Confirm Password",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFF3F2F2)),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFF3F2F2)),
-              ),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFF3F2F2))),
               suffixIcon: GestureDetector(
                 onTap: () {
                   setState(() {
                     _obscureText = !_obscureText;
                   });
                 },
-                child: _obscureText
-                    ? const Icon(Icons.visibility_off, color: Color(0xFF868686))
-                    : const Icon(Icons.visibility, color: Color(0xFF868686)),
+                child:
+                    _obscureText
+                        ? const Icon(Icons.visibility_off, color: Color(0xFF868686))
+                        : const Icon(Icons.visibility, color: Color(0xFF868686)),
               ),
             ),
           ),
           const SizedBox(height: 16),
           // Sign Up Button
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                widget.onSubmit(_fullName ?? "", _phone ?? "", _email ?? "", _password ?? "");
+              }
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF22A45D),
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: const Text("Sign Up"),
           ),

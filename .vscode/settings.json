@@ -1,0 +1,16 @@
+{
+    "folder-color.pathColors": [
+        {
+            "folderPath": "Duo_dine/restro_delivery/",
+            "color": "foldercolorizer.color_00ccff"
+        },
+        {
+            "folderPath": "Duo_dine/restro_admin/",
+            "color": "foldercolorizer.color_ff9966"
+        },
+        {
+            "folderPath": "Duo_dine/restro/",
+            "color": "foldercolorizer.color_00cc99"
+        }
+    ]
+}

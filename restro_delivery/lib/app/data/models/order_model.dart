@@ -1,6 +1,4 @@
-import 'package:foodly_ui/models/restaurant_model.dart';
-
-import 'order_items_model.dart';
+import 'restaurant_model.dart';
 
 class OrderModel {
   String $id;
@@ -26,8 +24,7 @@ class OrderModel {
     return OrderModel(
       $id: json['\$id'],
       createdDate: DateTime.parse(json['\$createdAt']),
-      restaurant: List<Restaurant>.from(
-          json['restaurant'].map((x) => Restaurant.fromJson(x))),
+      restaurant: List<Restaurant>.from(json['restaurant'].map((x) => Restaurant.fromJson(x))),
       total_price: double.parse(json['total_price'].toString()),
       status: json['status'],
       user: json['users'].toString(),

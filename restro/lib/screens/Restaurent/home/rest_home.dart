@@ -50,6 +50,18 @@ class _RestHomeScreenState extends State<RestHomeScreen> {
             restaurant.value?.name ?? "Restaurant Name",
           ),
         ),
+        actions: [
+          if (_selectedIndex == 1)
+            TextButton.icon(
+                style: TextButton.styleFrom(
+                  foregroundColor: primaryColor,
+                ),
+                label: const Text('Refresh'),
+                icon: const Icon(Icons.refresh),
+                onPressed: () {
+                  Get.put(OrdersController()).getOrders();
+                }),
+        ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: CupertinoTabBar(

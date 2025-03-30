@@ -1,4 +1,4 @@
-import 'enums/delivery_status.dart';
+import '../enums/delivery_status.dart';
 
 class DeliveryPersonModel {
   String phone = '';

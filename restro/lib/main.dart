@@ -1,13 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/firebase_options.dart';
+import 'package:foodly_ui/functions/customize_error_handling.dart';
 import 'package:foodly_ui/init_controller.dart';
 import 'package:foodly_ui/screens/splash/splash_view.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+
 import 'constants.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
+  customizeErrorHandling();
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

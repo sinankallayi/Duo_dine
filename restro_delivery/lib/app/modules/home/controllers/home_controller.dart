@@ -1,97 +1,127 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:get/get.dart';
+
 import '/app/data/constants.dart';
-import '/app/data/models/restaurant_model.dart';
+import '../../../data/enums/delivery_status.dart';
+import '../../../data/models/order_items_model.dart';
 
 class HomeController extends GetxController {
-  RxList<Restaurant> restaurants = <Restaurant>[].obs;
+  RxList<OrderItemsModel> orderItemsModel = <OrderItemsModel>[].obs;
   final isLoading = true.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
 
   @override
-  Future<void> onReady() async {
-    await loadRestaurants();
+  onReady() {
+    loadOrders();
+    super.onReady();
   }
 
-  Future<void> loadRestaurants() async {
+  Future<void> loadOrders() async {
     try {
       isLoading.value = true;
       hasError.value = false;
       errorMessage.value = '';
+      var userId = user?.$id;
+      if (userId == null) {
+        hasError.value = true;
+        errorMessage.value = 'User not logged in';
+        isLoading.value = false;
+        return;
+      }
 
       var result = await databases.listDocuments(
-          databaseId: dbId, collectionId: restaurantCollection);
-      restaurants.value =
-          result.documents.map((e) => Restaurant.fromJson(e.data)).toList();
+        databaseId: dbId,
+        collectionId: orderItemsCollection,
+        queries: [Query.equal('deliveryPerson', userId)],
+      );
+      orderItemsModel.value =
+          result.documents.map((e) => OrderItemsModel.fromJson(e.data)).toList();
     } catch (e) {
       hasError.value = true;
-      errorMessage.value = 'Failed to load restaurants: ${e.toString()}';
+      errorMessage.value = 'Failed to load orders: ${e.toString()}';
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> approve(String docId) async {
+  Future<void> changeStatus(OrderItemsModel orderItemsModel, DeliveryStatus status) async {
+    print("Changing status to $status");
     try {
       isLoading.value = true;
       await databases.updateDocument(
-          databaseId: dbId,
-          collectionId: restaurantCollection,
-          documentId: docId,
-          data: {'approved': true});
-      Get.snackbar('Success', 'Restaurant approved successfully');
-      await loadRestaurants();
+        databaseId: dbId,
+        collectionId: deliveryPersonsCollection,
+        documentId: orderItemsModel.deliveryPerson!.$id,
+        data: {'deliveryStatus': status.value},
+      );
+      Get.snackbar('Success', 'Ordrer status changed to ${status.statusText}');
+      await loadOrders();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to approve restaurant: ${e.toString()}');
+      Get.snackbar('Error', 'Failed to accept order: ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> reject(String docId) async {
+  Future<void> accept(OrderItemsModel orderItemsModel) async {
     try {
       isLoading.value = true;
       await databases.updateDocument(
-          databaseId: dbId,
-          collectionId: restaurantCollection,
-          documentId: docId,
-          data: {'approved': false});
-      Get.snackbar('Success', 'Restaurant rejected successfully');
-      await loadRestaurants();
+        databaseId: dbId,
+        collectionId: deliveryPersonsCollection,
+        documentId: orderItemsModel.deliveryPerson!.$id,
+        data: {'deliveryStatus': DeliveryStatus.acceptedOrder.value},
+      );
+      Get.snackbar('Success', 'Delivery person accepted the order');
+      await loadOrders();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to reject restaurant: ${e.toString()}');
+      Get.snackbar('Error', 'Failed to accept order: ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> refreshRestaurants() async {
-    await loadRestaurants();
+  Future<void> reject(OrderItemsModel orderItemsModel) async {
+    try {
+      isLoading.value = true;
+      await databases.updateDocument(
+        databaseId: dbId,
+        collectionId: deliveryPersonsCollection,
+        documentId: orderItemsModel.deliveryPerson!.$id,
+        data: {'deliveryStatus': DeliveryStatus.rejectedOrder.value},
+      );
+
+      await databases.updateDocument(
+        databaseId: dbId,
+        collectionId: orderItemsCollection,
+        documentId: orderItemsModel.$id,
+        data: {'deliveryPerson': null, 'status': 'cooking'},
+      );
+      Get.snackbar('Success', 'Delivery person rejected the order');
+      await loadOrders();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to reject order: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
-  void delete(String id) {
-    Get.defaultDialog(
-      title: 'Delete Restaurant',
-      middleText: 'Are you sure you want to delete this restaurant?',
-      textConfirm: 'Delete',
-      textCancel: 'Cancel',
-      confirmTextColor: Get.theme.colorScheme.error,
-      onConfirm: () async {
-        try {
-          isLoading.value = true;
-          await databases.deleteDocument(
-              databaseId: dbId,
-              collectionId: restaurantCollection,
-              documentId: id);
-          Get.back();
-          Get.snackbar('Success', 'Restaurant deleted successfully');
-          await loadRestaurants();
-        } catch (e) {
-          Get.snackbar('Error', 'Failed to delete restaurant: ${e.toString()}');
-        } finally {
-          isLoading.value = false;
-        }
-      },
-    );
+  Future<void> headToRestaurant(OrderItemsModel orderItemsModel) async {
+    try {
+      isLoading.value = true;
+      await databases.updateDocument(
+        databaseId: dbId,
+        collectionId: deliveryPersonsCollection,
+        documentId: orderItemsModel.deliveryPerson!.$id,
+        data: {'deliveryStatus': DeliveryStatus.headingToRestaurant.value},
+      );
+      Get.snackbar('Success', 'Delivery person headed to restaurant');
+      await loadOrders();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to accept order: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

@@ -1,8 +1,6 @@
 import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/models/payment_model.dart';
 import 'package:get/get.dart';
-import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart';
 
 class PaymentController extends GetxController {
   RxList<Payment> payments = <Payment>[].obs;
