@@ -266,7 +266,8 @@
                 "create(\"users\")",
                 "read(\"users\")",
                 "update(\"users\")",
-                "delete(\"users\")"
+                "delete(\"users\")",
+                "read(\"guests\")"
             ],
             "databaseId": "67dd045f0027aa53f550",
             "name": "items",
@@ -457,21 +458,6 @@
                     "side": "parent"
                 },
                 {
-                    "key": "status",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "elements": [
-                        "pending",
-                        "delivered",
-                        "cancelled",
-                        "delivering",
-                        "cooking"
-                    ],
-                    "format": "enum",
-                    "default": "pending"
-                },
-                {
                     "key": "deliveryPerson",
                     "type": "relationship",
                     "required": false,
@@ -506,6 +492,14 @@
                     "twoWayKey": "67c97b6500386871acb7",
                     "onDelete": "setNull",
                     "side": "parent"
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": "orderPlaced"
                 }
             ],
             "indexes": []
@@ -565,7 +559,9 @@
                 "create(\"users\")",
                 "read(\"users\")",
                 "update(\"users\")",
-                "delete(\"users\")"
+                "delete(\"users\")",
+                "create(\"guests\")",
+                "read(\"guests\")"
             ],
             "databaseId": "67dd045f0027aa53f550",
             "name": "orders",
@@ -630,7 +626,10 @@
                 "create(\"users\")",
                 "read(\"users\")",
                 "update(\"users\")",
-                "delete(\"users\")"
+                "delete(\"users\")",
+                "create(\"any\")",
+                "read(\"any\")",
+                "update(\"any\")"
             ],
             "databaseId": "67dd045f0027aa53f550",
             "name": "delivery_person",
@@ -647,10 +646,10 @@
                 {
                     "key": "phone",
                     "type": "string",
-                    "required": true,
+                    "required": false,
                     "array": false,
-                    "size": 10,
-                    "default": null
+                    "size": 20,
+                    "default": ""
                 },
                 {
                     "key": "location",
@@ -667,6 +666,14 @@
                     "array": false,
                     "size": 50,
                     "default": null
+                },
+                {
+                    "key": "deliveryStatus",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": "online"
                 }
             ],
             "indexes": []
