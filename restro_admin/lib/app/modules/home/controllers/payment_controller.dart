@@ -22,10 +22,34 @@ class PaymentController extends GetxController {
       errorMessage.value = '';
 
       var result = await databases.listDocuments(
-          databaseId: dbId, collectionId: paymentCollection);
+        databaseId: dbId,
+        collectionId: paymentCollection,
+      );
 
-      payments.value =
-          result.documents.map((e) => Payment.fromJson(e.data)).toList();
+      List<Payment> paymentList = [];
+      for (var doc in result.documents) {
+        var payment = Payment.fromJson(doc.data);
+
+        // Fetch user details only if userId exists
+        if (payment.userId.isNotEmpty) {
+          try {
+            var userDoc = await databases.getDocument(
+              databaseId: dbId,
+              collectionId:
+                  userCollection, // Replace with your User Collection ID
+              documentId: payment.userId,
+            );
+            payment.userName =
+                userDoc.data['name'] ?? 'Unknown User'; // Store user name
+          } catch (e) {
+            payment.userName = 'Unknown User'; // Default if user fetch fails
+          }
+        }
+
+        paymentList.add(payment);
+      }
+
+      payments.value = paymentList;
     } catch (e) {
       hasError.value = true;
       errorMessage.value = 'Failed to load payments: ${e.toString()}';
@@ -34,17 +58,17 @@ class PaymentController extends GetxController {
     }
   }
 
-  Future<void> deletePayment(String id) async {
-    try {
-      isLoading.value = true;
-      await databases.deleteDocument(
-          databaseId: dbId, collectionId: paymentCollection, documentId: id);
-      Get.snackbar('Success', 'Payment deleted successfully');
-      await loadPayments();
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to delete payment: ${e.toString()}');
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  // Future<void> deletePayment(String id) async {
+  //   try {
+  //     isLoading.value = true;
+  //     await databases.deleteDocument(
+  //         databaseId: dbId, collectionId: paymentCollection, documentId: id);
+  //     Get.snackbar('Success', 'Payment deleted successfully');
+  //     await loadPayments();
+  //   } catch (e) {
+  //     Get.snackbar('Error', 'Failed to delete payment: ${e.toString()}');
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 }
