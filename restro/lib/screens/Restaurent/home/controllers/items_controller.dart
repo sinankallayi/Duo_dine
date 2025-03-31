@@ -214,7 +214,8 @@ class ItemsScreenController extends GetxController {
                       ),
                     ),
                     Expanded(
-                      child: DropdownButton<String>(
+                      child: Obx(
+                        () => DropdownButton<String>(
                         value: status.value,
                         onChanged: (String? value) {
                           status.value = value!;
@@ -228,7 +229,7 @@ class ItemsScreenController extends GetxController {
                           );
                         }).toList(),
                       ),
-                    ),
+                    )),
                   ],
                 ),
                 ElevatedButton(

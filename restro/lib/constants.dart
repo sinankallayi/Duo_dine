@@ -91,6 +91,7 @@ const orderItemsCollection = "67935e14001fe833d665";
 const ordersCollection = "67935cf2002174bad91d";
 const deliveryPersonsCollection = "67c96b630024ab1bf027";
 const paymentsCollection = "67cd39f90020db666b4f";
+const favoritesCollection = "67ea605a001d045c96fc";
 
 // storage
 const itemsBucketId = '67dd058f002e7a062527';

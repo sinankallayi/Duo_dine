@@ -13,6 +13,7 @@ class MenuItemModel {
   String $id;
   DateTime createdAt;
   DateTime updatedAt;
+  bool isFavorite = false;
 
   MenuItemModel({
     required this.name,
@@ -20,7 +21,7 @@ class MenuItemModel {
     required this.price,
     this.availability = true,
     this.rating = 0.0,
-    this.featured, 
+    this.featured,
     required this.restaurant,
     required this.category,
     required this.imageId,

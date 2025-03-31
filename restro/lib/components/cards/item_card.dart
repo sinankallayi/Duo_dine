@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
@@ -11,11 +12,15 @@ class ItemCard extends StatelessWidget {
     required this.foodType,
     required this.price,
     required this.press,
+    required this.onFavoritePressed,
+    this.isFavorite = false,
   });
 
   final String? title, description, image, foodType;
   final double? price;
+  final bool isFavorite;
   final VoidCallback press;
+  final VoidCallback onFavoritePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +65,22 @@ class ItemCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title!,
-                      maxLines: 1,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 18),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title!,
+                            maxLines: 1,
+                            style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 18),
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: onFavoritePressed,
+                            icon: Icon(
+                              isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                              color: Colors.red,
+                            ))
+                      ],
                     ),
                     Text(
                       description!,
@@ -80,10 +94,8 @@ class ItemCard extends StatelessWidget {
                         const Spacer(),
                         Text(
                           "₹$price",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .copyWith(color: primaryColor),
+                          style:
+                              Theme.of(context).textTheme.labelLarge!.copyWith(color: primaryColor),
                         )
                       ],
                     ),

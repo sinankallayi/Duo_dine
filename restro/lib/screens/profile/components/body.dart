@@ -1,7 +1,11 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foodly_ui/data.dart';
 import 'package:foodly_ui/functions/auth.dart';
+import 'package:foodly_ui/screens/favorites/favorites_screen.dart';
 import 'package:foodly_ui/screens/findRestaurants/find_restaurants_screen.dart';
 import 'package:foodly_ui/screens/splash/splash_view.dart';
 import 'package:get/get.dart';
@@ -21,27 +25,35 @@ class Body extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: defaultPadding),
-              Text("Account Settings",
-                  style: Theme.of(context).textTheme.headlineMedium),
+              Text("Account Settings", style: Theme.of(context).textTheme.headlineMedium),
               Text(
                 "Update your settings like notifications, payments, profile edit etc.",
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 16),
               ProfileMenuCard(
-                svgSrc: "assets/icons/profile.svg",
+                icon: CupertinoIcons.heart,
+                title: "Favorites",
+                subTitle: "Order your favorite items",
+                press: () {
+                  log("Pressed favorites");
+                  Get.to(() => const FavoritesScreen());
+                },
+              ),
+              ProfileMenuCard(
+                icon: CupertinoIcons.person,
                 title: "Profile Information",
                 subTitle: "Change your account information",
                 press: () {},
               ),
               ProfileMenuCard(
-                svgSrc: "assets/icons/lock.svg",
+                icon: CupertinoIcons.lock,
                 title: "Change Password",
                 subTitle: "Change your password",
                 press: () {},
               ),
               ProfileMenuCard(
-                svgSrc: "assets/icons/forward.svg",
+                icon: CupertinoIcons.square_on_square,
                 title: "Switch to restaurant",
                 subTitle: "Switch to your restaurant account",
                 press: () async {
@@ -51,17 +63,17 @@ class Body extends StatelessWidget {
                 },
               ),
               ProfileMenuCard(
-                svgSrc: "assets/icons/marker.svg",
+                icon: CupertinoIcons.location,
                 title: "Locations",
                 subTitle: "Add or remove your delivery locations",
                 press: () {
                   // FindRestaurantsScreen();
-                  Get.to(FindRestaurantsScreen());
+                  Get.to(() => const FindRestaurantsScreen());
                 },
               ),
               // logout
               ProfileMenuCard(
-                svgSrc: "assets/icons/logout.svg",
+                icon: CupertinoIcons.square_arrow_left,
                 title: "Logout",
                 subTitle: "Logout from your account",
                 press: () {
@@ -132,11 +144,12 @@ class ProfileMenuCard extends StatelessWidget {
     super.key,
     this.title,
     this.subTitle,
-    this.svgSrc,
+    this.icon,
     this.press,
   });
 
-  final String? title, subTitle, svgSrc;
+  final String? title, subTitle;
+  final IconData? icon;
   final VoidCallback? press;
 
   @override
@@ -150,14 +163,9 @@ class ProfileMenuCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: Row(
             children: [
-              SvgPicture.asset(
-                svgSrc!,
-                height: 24,
-                width: 24,
-                colorFilter: ColorFilter.mode(
-                  titleColor.withOpacity(0.64),
-                  BlendMode.srcIn,
-                ),
+              Icon(
+                icon,
+                color: Colors.black.withAlpha(130),
               ),
               const SizedBox(width: 8),
               Expanded(

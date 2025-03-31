@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 import '../../constants.dart';
 import 'components/featured_items.dart';
-import 'components/iteams.dart';
+import 'components/items.dart';
 import 'components/restaurrant_info.dart';
 
 class DetailsScreen extends GetView<DetailsController> {
@@ -39,8 +39,8 @@ class DetailsScreen extends GetView<DetailsController> {
                       const SizedBox(height: defaultPadding / 2),
                       RestaurantInfo(restaurant: restaurant),
                       const SizedBox(height: defaultPadding),
-                      FeaturedItems(),
-                      Items()
+                      const FeaturedItems(),
+                      const Items()
                     ],
                   ),
                 ),

@@ -1,35 +1,38 @@
-import 'package:appwrite/appwrite.dart';
-import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/models/menu_items_model.dart';
 import 'package:foodly_ui/models/restaurant_model.dart';
+import 'package:foodly_ui/services/db_service.dart';
 import 'package:get/get.dart';
+
+import '../../controllers/favorites_controller.dart';
+import '../../data.dart';
 
 class DetailsController extends GetxController {
   final isLoading = true.obs;
   Restaurant? restaurant;
   RxList<MenuItemModel> items = <MenuItemModel>[].obs;
+  RxList<MenuItemModel> favoriteItems = <MenuItemModel>[].obs;
   RxList<MenuItemModel> featuredItems = <MenuItemModel>[].obs;
-
+  final DbService db = DbService();
+  final FavoritesController _favoritesController = Get.put(FavoritesController());
+  String? userId;
   @override
-  void onInit() {
-    super.onInit();
+  void onReady() async {
+    userId = user?.$id;
+    await loadItems();
+    if (userId != null) {
+      await loadFavorites();
+    }
+    super.onReady();
   }
 
-  @override
-  Future<void> onReady() async {
-    // load items
+  Future<void> loadItems() async {
+    isLoading.value = true;
     try {
-      final response = await db.listDocuments(
-          databaseId: dbId,
-          collectionId: itemsCollection,
-          queries: [Query.equal("restaurant", restaurant!.id)]);
-
-      final fetchedItems = response.documents
-          .map((doc) => MenuItemModel.fromJson(doc.data))
-          .toList();
-      items.addAll(fetchedItems);
-      featuredItems
-          .addAll(fetchedItems.where((item) => item.featured!).toList());
+      final fetchedItems = await db.getAvailableItemsForRestaurant(restaurant!.id);
+      items.assignAll(fetchedItems);
+      updateFavoriteStatus(items);
+      // featuredItems.assignAll(fetchedItems.where((item) => item.featured!).toList());
+      // updateFavoriteStatus(featuredItems);
 
       print('Items loaded: ${items.length}');
     } catch (e) {
@@ -37,11 +40,36 @@ class DetailsController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-    super.onReady();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  Future<void> loadFavorites() async {
+    if (userId != null) {
+      isLoading.value = true;
+      try {
+        var favs = await db.getUserFavoriteItemIds(userId!);
+        final fetchedItems = await db.getAvailableItemsByIds(favs);
+        favoriteItems.assignAll(fetchedItems);
+        updateFavoriteStatus(favoriteItems);
+
+        print('Items loaded: ${items.length}');
+      } catch (e) {
+        print('Error loading items: $e');
+      } finally {
+        isLoading.value = false;
+      }
+    }
+  }
+
+  void updateFavoriteStatus(items) {
+    for (var item in items) {
+      item.isFavorite = _favoritesController.favoriteItemIds.contains(item.$id);
+    }
+    items.refresh();
+  }
+
+  void toggleFavorite(itemId) async {
+    _favoritesController.toggleFavorite(itemId);
+    await loadItems();
+    await loadFavorites();
   }
 }
