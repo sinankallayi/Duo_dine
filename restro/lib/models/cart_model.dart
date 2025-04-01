@@ -11,19 +11,20 @@ class CartModel {
     required this.quantity,
   });
 
-  // toJson
+  // Convert to JSON for Appwrite
   Map<String, dynamic> toJson() {
     return {
-      'items': item.toJson(),
+      'items': item.$id, // Store only the item ID
       'quantity': quantity,
     };
   }
 
-  // fromJson
+  // Convert from JSON from Appwrite
   factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
       $id: json['\$id'],
-      item: MenuItemModel.fromJson(json['items']),
+      item:
+          MenuItemModel.fromJson(json['items']), // Ensure relationship mapping
       quantity: json['quantity'],
     );
   }

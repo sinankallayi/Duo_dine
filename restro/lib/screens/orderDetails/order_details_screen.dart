@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:foodly_ui/screens/orderDetails/order_details_controller.dart';
 import 'package:foodly_ui/screens/orderDetails/orders.dart';
 import 'package:foodly_ui/screens/orderDetails/payment_screen.dart';
@@ -19,37 +18,87 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
   Widget build(BuildContext context) {
     Get.put(OrderDetailsController());
     return Scaffold(
+      backgroundColor: Colors.grey[100], // Light gray background
       appBar: AppBar(
         title: const Text("Your Orders"),
+        //backgroundColor: Colors.blue, // Standard blue for the app bar
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
           child: Obx(
             () => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: defaultPadding),
-                // List of cart items
+
+                // **Cart Items**
                 ...List.generate(
                   controller.cartItems.length,
                   (index) => Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: defaultPadding / 2),
-                    child: OrderedItemCard(
-                      title: controller.cartItems[index].item.name,
-                      description: controller.cartItems[index].item.description,
-                      numOfItem: controller.cartItems[index].quantity,
-                      price: controller.cartItems[index].item.price *
-                          controller.cartItems[index].quantity,
+                    child: Card(
+                      color: Colors.white, // White card for cart items
+                      elevation: 2, // Subtle shadow
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(8), // Rounded corners
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(defaultPadding / 2),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: OrderedItemCard(
+                                title: controller.cartItems[index].item.name,
+                                description: controller
+                                    .cartItems[index].item.description,
+                                numOfItem: controller.cartItems[index].quantity,
+                                price: controller.cartItems[index].item.price *
+                                    controller.cartItems[index].quantity,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete,
+                                  color: Color(
+                                      0xFFEF5350)), // Muted red delete icon
+                              onPressed: () => controller.removeItemFromCart(
+                                  controller.cartItems[index].$id),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                PriceRow(text: "Subtotal", price: controller.cartPrice.value),
-                const SizedBox(height: defaultPadding / 2),
-                // const PriceRow(text: "Delivery", price: 0),
-                // const SizedBox(height: defaultPadding / 2),
-                TotalPrice(price: controller.cartPrice.value),
+                const SizedBox(height: defaultPadding),
+
+                // **Price Section**
+                Card(
+                  color: Colors.white, // White card for price
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(
+                        color: Color(0xFF64B5F6)), // Light blue border
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: Column(
+                      children: [
+                        PriceRow(
+                            text: "Subtotal",
+                            price: controller.cartPrice.value),
+                        const SizedBox(height: defaultPadding / 2),
+                        TotalPrice(price: controller.cartPrice.value),
+                      ],
+                    ),
+                  ),
+                ),
                 const SizedBox(height: defaultPadding * 2),
+
+                // **Checkout Button**
                 PrimaryButton(
                   text: "Checkout (\₹${controller.cartPrice.value})",
                   press: () {
@@ -57,12 +106,14 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                       () => const PaymentScreen(),
                       arguments: {
                         "price": controller.cartPrice.value,
-                        "items": controller.cartItems
+                        "items": controller.cartItems,
                       },
                     );
                   },
                 ),
-                const SizedBox(height: defaultPadding),
+                const SizedBox(height: defaultPadding * 2),
+
+                // **Orders Section**
                 Text('Orders', style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: defaultPadding),
                 ...List.generate(
@@ -70,38 +121,26 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                   (index) => Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: defaultPadding / 2),
-                    child: Slidable(
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(), // Smooth sliding motion
-                        extentRatio:
-                            0.3, // How much of the widget the action pane covers
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {
-                              // Action to cancel the order
-                              // controller.cancelOrder(index);
-                            },
-                            backgroundColor: Colors.transparent,
-                            foregroundColor: Colors.orange,
-                            icon: Icons.cancel,
-                            label: 'Cancel Order',
-                          ),
-                        ],
+                    child: Card(
+                      color: Color(0xFFE3F2FD), // Light blue card for orders
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => const Orders(),
-                              arguments: controller.orders[index]);
-                        },
-                        child: OrderedItemCard(
-                          title: DateFormat('dd-MMM-yyyy hh:MM AA')
-                              .format(controller.orders[index].createdDate),
-                          description: 'items',
-                          // description: controller.orders[index].restaurant
-                          //     .map((element) => element.name)
-                          //     .join(', '),
-                          numOfItem: 1,
-                          price: controller.orders[index].total_price,
+                      child: Padding(
+                        padding: const EdgeInsets.all(defaultPadding / 2),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(() => const Orders(),
+                                arguments: controller.orders[index]);
+                          },
+                          child: OrderedItemCard(
+                            title: DateFormat('dd-MMM-yyyy hh:mm a')
+                                .format(controller.orders[index].createdDate),
+                            description: 'items',
+                            numOfItem: 1,
+                            price: controller.orders[index].total_price,
+                          ),
                         ),
                       ),
                     ),
@@ -115,21 +154,3 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
     );
   }
 }
-
-const List<Map> demoItems = [
-  {
-    "title": "Cookie Sandwich",
-    "price": 7.4,
-    "numOfItem": 1,
-  },
-  {
-    "title": "Combo Burger",
-    "price": 12,
-    "numOfItem": 1,
-  },
-  {
-    "title": "Oyster Dish",
-    "price": 8.6,
-    "numOfItem": 2,
-  },
-];

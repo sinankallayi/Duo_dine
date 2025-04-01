@@ -15,7 +15,7 @@ class OrderDetailsController extends GetxController {
 
   @override
   void onInit() {
-    if(user == null) return;
+    if (user == null) return;
     getCartItems();
     getOrders();
     super.onInit();
@@ -62,4 +62,29 @@ class OrderDetailsController extends GetxController {
   }
 
   void cancelOrder(int index) {}
+
+  Future<void> removeItemFromCart(String cartItemId) async {
+    try {
+      // Remove item from Appwrite database
+      await db.deleteDocument(
+        databaseId: dbId,
+        collectionId: cartCollection,
+        documentId: cartItemId,
+      );
+
+      // Remove from local cart list
+      cartItems.removeWhere((item) => item.$id == cartItemId);
+
+      // Update total cart price
+      cartPrice.value = cartItems.fold(
+        0,
+        (previousValue, element) =>
+            previousValue + element.item.price * element.quantity,
+      );
+
+      Get.snackbar("Success", "Item removed from cart");
+    } catch (e) {
+      Get.snackbar("Error", "Failed to remove item: $e");
+    }
+  }
 }
