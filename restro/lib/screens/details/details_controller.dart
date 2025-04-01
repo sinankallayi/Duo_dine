@@ -15,10 +15,11 @@ class DetailsController extends GetxController {
   final DbService db = DbService();
   final FavoritesController _favoritesController = Get.put(FavoritesController());
   String? userId;
+
   @override
   void onReady() async {
-    userId = user?.$id;
     await loadItems();
+    userId = user?.$id;
     if (userId != null) {
       await loadFavorites();
     }
@@ -54,9 +55,8 @@ class DetailsController extends GetxController {
         print('Items loaded: ${items.length}');
       } catch (e) {
         print('Error loading items: $e');
-      } finally {
-        isLoading.value = false;
       }
+      isLoading.value = false;
     }
   }
 
