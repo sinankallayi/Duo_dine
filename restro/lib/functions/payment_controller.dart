@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/data.dart';
+import 'package:foodly_ui/functions/auth.dart';
 import 'package:foodly_ui/models/cart_model.dart';
 import 'package:foodly_ui/screens/orderDetails/order_details_controller.dart';
 import 'package:get/get.dart';
@@ -29,14 +30,15 @@ class PaymentController extends GetxController {
 
   Future<void> simulatePayment() async {
     if (!formKey.currentState!.validate()) {
-      Get.snackbar('Error', 'Please enter valid card details', backgroundColor: Colors.red);
+      Get.snackbar('Error', 'Please enter valid card details',
+          backgroundColor: Colors.red);
       return;
     }
 
     isProcessing.value = true;
 
     // Simulate success/failure
-    bool isSuccess = true;//DateTime.now().second % 2 == 0;
+    bool isSuccess = true; //DateTime.now().second % 2 == 0;
 
     if (isSuccess) {
       await _createOrder(args['items'], args['price'], 'success');
@@ -52,10 +54,12 @@ class PaymentController extends GetxController {
     );
   }
 
-  Future<void> _createOrder(List<CartModel> items, double price, String status) async {
-    await account.get();
+  Future<void> _createOrder(
+      List<CartModel> items, double price, String status) async {
+    await getUserInfo();
     String orderId = ID.unique();
-    List<String> restaurantIds = items.map((e) => e.item.restaurant.id).toList();
+    List<String> restaurantIds =
+        items.map((e) => e.item.restaurant.id).toList();
 
     await _createDocument(ordersCollection, orderId, {
       'users': user!.$id,
@@ -84,11 +88,14 @@ class PaymentController extends GetxController {
     isProcessing.value = false;
   }
 
-
-  Future<void> _createPayments(List<CartModel> items, double price, String status) async {
+  Future<void> _createPayments(
+      List<CartModel> items, double price, String status) async {
     for (var item in items) {
+      print(user);
+      print(user?.$id ?? "no userid");
       await _createDocument(paymentsCollection, ID.unique(), {
-        'users': user!.$id,
+        'userId': user!.$id,
+        'userName': user?.name ?? "customer",
         'amount': double.parse(price.toStringAsFixed(2)),
         'status': status,
         'restaurant': item.item.restaurant.id,
@@ -113,9 +120,14 @@ class PaymentController extends GetxController {
     }
   }
 
-  Future<void> _createDocument(String collection, String docId, Map<String, dynamic> data) async {
+  Future<void> _createDocument(
+      String collection, String docId, Map<String, dynamic> data) async {
     try {
-      await db.createDocument(databaseId: dbId, collectionId: collection, documentId: docId, data: data);
+      await db.createDocument(
+          databaseId: dbId,
+          collectionId: collection,
+          documentId: docId,
+          data: data);
     } on AppwriteException catch (e) {
       debugPrint('Error creating document: ${e.code} - ${e.message}');
     }
@@ -123,7 +135,8 @@ class PaymentController extends GetxController {
 
   Future<void> _deleteDocument(String collection, String docId) async {
     try {
-      await db.deleteDocument(databaseId: dbId, collectionId: collection, documentId: docId);
+      await db.deleteDocument(
+          databaseId: dbId, collectionId: collection, documentId: docId);
     } on AppwriteException catch (e) {
       debugPrint('Error deleting document: ${e.code} - ${e.message}');
     }

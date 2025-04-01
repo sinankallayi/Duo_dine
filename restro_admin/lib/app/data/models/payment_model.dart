@@ -21,9 +21,8 @@ class Payment {
     return Payment(
       id: json['\$id'] ?? '',
       status: json['status'] ?? '',
-      userId: json['users'] is String
-          ? json['users'] // If it's a string, use it directly
-          : (json['users']?['\$id'] ?? ''), // If it's a map, extract the ID
+      userId: json['userId'] ?? '', // If it's a map, extract the ID
+      userName: json['userName'] ?? '',
       restaurantId: json['restaurant'] is String
           ? json['restaurant']
           : (json['restaurant']?['\$id'] ?? ''), // Extract ID from map

@@ -31,16 +31,11 @@ class PaymentsView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Status: ${payment.status}'),
-                    Text('User ID: ${payment.userId}'),
-                    Text('Restaurant ID: ${payment.restaurantId}'),
+                    Text('User: ${payment.userName}'),
+                   
                   ],
                 ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () {
-                    controller.deletePayment(payment.id);
-                  },
-                ),
+              
               ),
             );
           },

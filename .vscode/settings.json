@@ -11,6 +11,18 @@
         {
             "folderPath": "Duo_dine/restro/",
             "color": "foldercolorizer.color_00cc99"
+        },
+        {
+            "folderPath": "Project\\restro\\",
+            "color": "foldercolorizer.color_00cc66"
+        },
+        {
+            "folderPath": "Project\\restro_admin\\",
+            "color": "foldercolorizer.color_00ccff"
+        },
+        {
+            "folderPath": "Project\\restro_delivery\\",
+            "color": "foldercolorizer.color_cc00ff"
         }
     ]
 }

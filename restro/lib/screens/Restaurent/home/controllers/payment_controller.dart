@@ -1,4 +1,6 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:foodly_ui/constants.dart';
+import 'package:foodly_ui/data.dart';
 import 'package:foodly_ui/models/payment_model.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +22,12 @@ class PaymentController extends GetxController {
       errorMessage.value = '';
 
       var result = await db.listDocuments(
-          databaseId: dbId, collectionId: paymentsCollection);
+          databaseId: dbId,
+          collectionId: paymentsCollection,
+          queries: [
+            Query.equal('restaurant', restaurant.value!.id),
+            Query.orderDesc('\$createdAt')
+          ]);
 
       payments.value =
           result.documents.map((e) => Payment.fromJson(e.data)).toList();
@@ -32,17 +39,17 @@ class PaymentController extends GetxController {
     }
   }
 
-  Future<void> deletePayment(String id) async {
-    try {
-      isLoading.value = true;
-      await db.deleteDocument(
-          databaseId: dbId, collectionId: paymentsCollection, documentId: id);
-      Get.snackbar('Success', 'Payment deleted successfully');
-      await loadPayments();
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to delete payment: ${e.toString()}');
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  // Future<void> deletePayment(String id) async {
+  //   try {
+  //     isLoading.value = true;
+  //     await db.deleteDocument(
+  //         databaseId: dbId, collectionId: paymentsCollection, documentId: id);
+  //     Get.snackbar('Success', 'Payment deleted successfully');
+  //     await loadPayments();
+  //   } catch (e) {
+  //     Get.snackbar('Error', 'Failed to delete payment: ${e.toString()}');
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 }
