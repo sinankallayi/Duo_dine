@@ -14,15 +14,15 @@
         },
         {
             "folderPath": "Project\\restro\\",
-            "color": "foldercolorizer.color_00cc66"
+            "color": "foldercolorizer.color_ffff99"
         },
         {
             "folderPath": "Project\\restro_admin\\",
-            "color": "foldercolorizer.color_00ccff"
+            "color": "foldercolorizer.color_ffcccc"
         },
         {
             "folderPath": "Project\\restro_delivery\\",
-            "color": "foldercolorizer.color_cc00ff"
+            "color": "foldercolorizer.color_ccccff"
         }
     ]
 }
