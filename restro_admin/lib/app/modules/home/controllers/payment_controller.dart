@@ -1,8 +1,7 @@
-import 'package:get/get.dart';
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart';
-import 'package:restro_admin/app/data/models/payment_model.dart';
+import 'package:get/get.dart';
 import 'package:restro_admin/app/data/constants.dart';
+import 'package:restro_admin/app/data/models/payment_model.dart';
 
 class PaymentController extends GetxController {
   RxList<Payment> payments = <Payment>[].obs;
@@ -24,32 +23,38 @@ class PaymentController extends GetxController {
       var result = await databases.listDocuments(
         databaseId: dbId,
         collectionId: paymentCollection,
+        queries: [
+          Query.orderDesc('\$createdAt'),
+        ],
       );
 
-      List<Payment> paymentList = [];
-      for (var doc in result.documents) {
-        var payment = Payment.fromJson(doc.data);
+      payments.value =
+          result.documents.map((e) => Payment.fromJson(e.data)).toList();
 
-        // Fetch user details only if userId exists
-        if (payment.userId.isNotEmpty) {
-          try {
-            var userDoc = await databases.getDocument(
-              databaseId: dbId,
-              collectionId:
-                  userCollection, // Replace with your User Collection ID
-              documentId: payment.userId,
-            );
-            payment.userName =
-                userDoc.data['name'] ?? 'Unknown User'; // Store user name
-          } catch (e) {
-            payment.userName = 'Unknown User'; // Default if user fetch fails
-          }
-        }
+      // List<Payment> paymentList = [];
+      // for (var doc in result.documents) {
+      //   var payment = Payment.fromJson(doc.data);
 
-        paymentList.add(payment);
-      }
+      // // Fetch user details only if userId exists
+      // if (payment.userId.isNotEmpty) {
+      //   try {
+      //     var userDoc = await databases.getDocument(
+      //       databaseId: dbId,
+      //       collectionId:
+      //           userCollection, // Replace with your User Collection ID
+      //       documentId: payment.userId,
+      //     );
+      //     payment.userName =
+      //         userDoc.data['userName'] ?? 'Unknown User'; // Store user name
+      //   } catch (e) {
+      //     payment.userName = 'Unknown User'; // Default if user fetch fails
+      //   }
+      // }
 
-      payments.value = paymentList;
+      //   paymentList.add(payment);
+      // }
+
+      // payments.value = paymentList;
     } catch (e) {
       hasError.value = true;
       errorMessage.value = 'Failed to load payments: ${e.toString()}';
