@@ -33,8 +33,7 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                 ...List.generate(
                   controller.cartItems.length,
                   (index) => Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding / 2),
+                    padding: const EdgeInsets.symmetric(vertical: defaultPadding / 2),
                     child: OrderedItemCard(
                       title: controller.cartItems[index].item.name,
                       description: controller.cartItems[index].item.description,
@@ -68,13 +67,11 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                 ...List.generate(
                   controller.orders.length,
                   (index) => Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding / 2),
+                    padding: const EdgeInsets.symmetric(vertical: defaultPadding / 2),
                     child: Slidable(
                       endActionPane: ActionPane(
                         motion: const ScrollMotion(), // Smooth sliding motion
-                        extentRatio:
-                            0.3, // How much of the widget the action pane covers
+                        extentRatio: 0.3, // How much of the widget the action pane covers
                         children: [
                           SlidableAction(
                             onPressed: (context) {
@@ -90,13 +87,13 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(() => const Orders(),
-                              arguments: controller.orders[index]);
+                          Get.to(() => const Orders(), arguments: controller.orders[index]);
                         },
                         child: OrderedItemCard(
-                          title: DateFormat('dd-MMM-yyyy hh:MM AA')
+                          title:
+                              '${controller.orders[index].itemCount} ${controller.orders[index].itemCount == 1 ? "item" : "items"}',
+                          description: DateFormat('d-MMM-yyyy hh:MM aa')
                               .format(controller.orders[index].createdDate),
-                          description: 'items',
                           // description: controller.orders[index].restaurant
                           //     .map((element) => element.name)
                           //     .join(', '),

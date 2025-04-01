@@ -54,16 +54,16 @@ class PaymentController extends GetxController {
     );
   }
 
-  Future<void> _createOrder(
-      List<CartModel> items, double price, String status) async {
+  Future<void> _createOrder(List<CartModel> items, double price, String status) async {
     await getUserInfo();
     String orderId = ID.unique();
-    List<String> restaurantIds =
+     List<String> restaurantIds =
         items.map((e) => e.item.restaurant.id).toList();
 
     await _createDocument(ordersCollection, orderId, {
       'users': user!.$id,
       'restaurant': restaurantIds,
+      'itemCount': items.length,
       'total_price': double.parse(price.toStringAsFixed(2)),
       'status': 'pending',
     });
@@ -91,8 +91,6 @@ class PaymentController extends GetxController {
   Future<void> _createPayments(
       List<CartModel> items, double price, String status) async {
     for (var item in items) {
-      print(user);
-      print(user?.$id ?? "no userid");
       await _createDocument(paymentsCollection, ID.unique(), {
         'userId': user!.$id,
         'userName': user?.name ?? "customer",
@@ -108,7 +106,7 @@ class PaymentController extends GetxController {
       await _deleteDocument(cartCollection, item.$id);
     }
   }
-
+  
   Future<void> _createOrderItems(List<CartModel> items, String orderId) async {
     for (var item in items) {
       await _createDocument(orderItemsCollection, ID.unique(), {

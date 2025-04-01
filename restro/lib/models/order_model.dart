@@ -1,10 +1,9 @@
-
-
 class OrderModel {
   String $id;
   // List<Restaurant> restaurant;
   DateTime createdDate;
   double total_price;
+  int itemCount;
   String status;
   String? user;
   String? complaints;
@@ -13,6 +12,7 @@ class OrderModel {
     required this.$id,
     // required this.restaurant,
     required this.total_price,
+    required this.itemCount,
     required this.createdDate,
     required this.status,
     required this.user,
@@ -27,6 +27,7 @@ class OrderModel {
       // restaurant: List<Restaurant>.from(
       //     json['restaurant'].map((x) => Restaurant.fromJson(x))),
       total_price: double.parse(json['total_price'].toString()),
+      itemCount: json['itemCount'] ?? 0,
       status: json['status'],
       user: json['users'].toString(),
       complaints: json['complaints'],
