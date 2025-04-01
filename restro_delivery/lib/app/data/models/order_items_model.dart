@@ -12,19 +12,19 @@ class OrderItemsModel {
   String $id;
   MenuItemModel items;
   int qty;
-  OrderModel orders;
+  // OrderModel orders;
   OrderStatus status;
   DeliveryPersonModel? deliveryPerson;
-  Restaurant restaurant;
+  // Restaurant restaurant;
 
   OrderItemsModel({
     required this.$id,
     required this.items,
     required this.qty,
-    required this.orders,
+    // required this.orders,
     required this.status,
     required this.deliveryPerson,
-    required this.restaurant,
+    // required this.restaurant,
   });
 
   // from json
@@ -33,12 +33,12 @@ class OrderItemsModel {
       $id: json['\$id'],
       items: MenuItemModel.fromJson(json['items']),
       qty: json['qty'],
-      orders: OrderModel.fromJson(json['orders']),
+      // orders: OrderModel.fromJson(json['orders']),
       status: OrderStatusExtension.fromString(json['status']),
       deliveryPerson: json['deliveryPerson'] != null
           ? DeliveryPersonModel.fromJson(json['deliveryPerson'])
           : null,
-      restaurant: Restaurant.fromJson(json['restaurant']),
+      // restaurant: Restaurant.fromJson(json['restaurant']),
     );
   }
 

@@ -11,7 +11,7 @@ void main() {
   customizeErrorHandling();
   WidgetsFlutterBinding.ensureInitialized();
   //client = Client().setProject('restro');
-  client = Client().setProject('67dc5f7e003032d8838b');
+  client = Client().setProject(projectId);
 
   runApp(
     GetMaterialApp(

@@ -20,8 +20,8 @@ class _RestHomeScreenState extends State<RestHomeScreen> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const ItemsScreen(),
     const OrdersScreen(),
+    const ItemsScreen(),
     const ProfileScreen(),
     const SettingsScreen(),
   ];
@@ -30,14 +30,12 @@ class _RestHomeScreenState extends State<RestHomeScreen> {
   void initState() {
     super.initState();
     Get.put(ItemsScreenController());
+    Get.put(OrdersController()).getOrders();
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (index == 1) {
-        Get.put(OrdersController()).getOrders();
-      }
     });
   }
 
@@ -51,7 +49,7 @@ class _RestHomeScreenState extends State<RestHomeScreen> {
           ),
         ),
         actions: [
-          if (_selectedIndex == 1)
+          if (_selectedIndex == 0)
             TextButton.icon(
                 style: TextButton.styleFrom(
                   foregroundColor: primaryColor,
@@ -67,12 +65,12 @@ class _RestHomeScreenState extends State<RestHomeScreen> {
       bottomNavigationBar: CupertinoTabBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood, size: 30),
-            label: 'Items',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long, size: 30),
             label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fastfood, size: 30),
+            label: 'Items',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person, size: 30),

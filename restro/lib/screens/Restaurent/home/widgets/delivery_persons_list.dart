@@ -44,7 +44,6 @@ class DeliveryPersonsList extends GetView<OrdersController> {
           } else {
             return ListView.separated(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(), 
               itemCount: controller.filteredDeliveryPersons.length,
               itemBuilder: (context, index) {
                 return Obx(

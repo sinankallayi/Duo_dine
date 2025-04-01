@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/constants.dart';
@@ -10,6 +12,7 @@ import 'dart:convert';
 
 import '../../../../models/enums/delivery_status.dart';
 import '../../../../models/enums/order_status.dart';
+import '../../../../services/db_service.dart';
 
 class OrdersController extends GetxController {
   RxBool isLoading = true.obs;
@@ -17,11 +20,22 @@ class OrdersController extends GetxController {
   RxList<OrderItemsModel> orderItems = <OrderItemsModel>[].obs;
   RxList<DeliveryPersonModel> deliveryPersons = <DeliveryPersonModel>[].obs;
   RxList<DeliveryPersonModel> filteredDeliveryPersons = <DeliveryPersonModel>[].obs;
+  final DbService _dbService = DbService();
 
   @override
   onReady() {
     getOrders();
+    _listenToFavorites();
     super.onReady();
+  }
+
+  void _listenToFavorites() {
+    _dbService.realtime
+        .subscribe(['databases.$dbId.collections.order_items.documents'])
+        .stream
+        .listen((event) {
+          getOrders();
+        });
   }
 
   void getOrders() async {
@@ -49,7 +63,6 @@ class OrdersController extends GetxController {
   }
 
   Future<void> updateOrderStatus(OrderItemsModel orderItem, OrderStatus nextStatus) async {
-    print("updating order status to ${nextStatus.value}");
     try {
       await db.updateDocument(
         databaseId: dbId,
@@ -57,6 +70,18 @@ class OrdersController extends GetxController {
         documentId: orderItem.$id,
         data: {
           "status": nextStatus.value,
+          "orders": orderItem.orders.$id,
+        },
+      );
+
+      await db.createDocument(
+        databaseId: dbId,
+        collectionId: orderTimelineCollection,
+        documentId: ID.unique(),
+        data: {
+          "itemId": orderItem.$id,
+          "status": nextStatus.value,
+          "description": nextStatus.statusText,
         },
       );
 
@@ -140,6 +165,7 @@ class OrdersController extends GetxController {
       documentId: orderItemsModel.$id,
       data: {
         "deliveryPerson": deliveryPerson.$id,
+        "orders": orderItemsModel.orders.$id,
       },
     );
 
@@ -211,6 +237,6 @@ class OrdersController extends GetxController {
     Match? match = regExp.firstMatch(jsonString!);
     String? id = match?.group(1);
 
-    return id!;
+    return id ?? jsonString.$id ?? "";
   }
 }

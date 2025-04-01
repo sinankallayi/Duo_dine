@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
@@ -57,12 +59,9 @@ class PaymentController extends GetxController {
   Future<void> _createOrder(List<CartModel> items, double price, String status) async {
     await getUserInfo();
     String orderId = ID.unique();
-     List<String> restaurantIds =
-        items.map((e) => e.item.restaurant.id).toList();
 
     await _createDocument(ordersCollection, orderId, {
       'users': user!.$id,
-      'restaurant': restaurantIds,
       'itemCount': items.length,
       'total_price': double.parse(price.toStringAsFixed(2)),
       'status': 'pending',
@@ -98,6 +97,7 @@ class PaymentController extends GetxController {
         'status': status,
         'restaurant': item.item.restaurant.id,
       });
+      log("Created payments: "+item.item.name);
     }
   }
 
@@ -115,6 +115,7 @@ class PaymentController extends GetxController {
         'qty': item.quantity,
         'restaurant': item.item.restaurant.id,
       });
+      log("Created orderItem: "+item.item.name);
     }
   }
 
@@ -127,7 +128,7 @@ class PaymentController extends GetxController {
           documentId: docId,
           data: data);
     } on AppwriteException catch (e) {
-      debugPrint('Error creating document: ${e.code} - ${e.message}');
+      log('Error creating document: ${e.code} - ${e.message}');
     }
   }
 
@@ -136,7 +137,7 @@ class PaymentController extends GetxController {
       await db.deleteDocument(
           databaseId: dbId, collectionId: collection, documentId: docId);
     } on AppwriteException catch (e) {
-      debugPrint('Error deleting document: ${e.code} - ${e.message}');
+      log('Error deleting document: ${e.code} - ${e.message}');
     }
   }
 }

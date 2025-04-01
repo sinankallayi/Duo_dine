@@ -458,14 +458,22 @@
                     "side": "parent"
                 },
                 {
-                    "key": "deliveryPerson",
+                    "key": "status",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": "orderPlaced"
+                },
+                {
+                    "key": "items",
                     "type": "relationship",
                     "required": false,
                     "array": false,
-                    "relatedCollection": "67c96b630024ab1bf027",
+                    "relatedCollection": "67935bfd001541bc5ae2",
                     "relationType": "manyToOne",
                     "twoWay": false,
-                    "twoWayKey": "67c96e6700115215362b",
+                    "twoWayKey": "67ec1328001efb9648b9",
                     "onDelete": "setNull",
                     "side": "parent"
                 },
@@ -477,29 +485,21 @@
                     "relatedCollection": "679351de0007535ff696",
                     "relationType": "manyToOne",
                     "twoWay": false,
-                    "twoWayKey": "67c9797d0020995f7c81",
+                    "twoWayKey": "67ec16d9000346b74443",
                     "onDelete": "setNull",
                     "side": "parent"
                 },
                 {
-                    "key": "items",
+                    "key": "deliveryPerson",
                     "type": "relationship",
                     "required": false,
                     "array": false,
-                    "relatedCollection": "67935bfd001541bc5ae2",
+                    "relatedCollection": "67c96b630024ab1bf027",
                     "relationType": "manyToOne",
                     "twoWay": false,
-                    "twoWayKey": "67c97b6500386871acb7",
+                    "twoWayKey": "67ec1c33002ace43504d",
                     "onDelete": "setNull",
                     "side": "parent"
-                },
-                {
-                    "key": "status",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 40,
-                    "default": "orderPlaced"
                 }
             ],
             "indexes": []
@@ -569,18 +569,6 @@
             "documentSecurity": false,
             "attributes": [
                 {
-                    "key": "restaurant",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "679351de0007535ff696",
-                    "relationType": "manyToMany",
-                    "twoWay": false,
-                    "twoWayKey": "67c40e9000075a01bbc0",
-                    "onDelete": "setNull",
-                    "side": "parent"
-                },
-                {
                     "key": "total_price",
                     "type": "double",
                     "required": false,
@@ -615,6 +603,15 @@
                     "required": false,
                     "array": false,
                     "size": 1000,
+                    "default": null
+                },
+                {
+                    "key": "itemCount",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "min": -9223372036854775808,
+                    "max": 9223372036854775807,
                     "default": null
                 }
             ],
@@ -700,18 +697,6 @@
                     "default": null
                 },
                 {
-                    "key": "users",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "67935d0b000fcda8cb7f",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67cd3a1a000355052ece",
-                    "onDelete": "setNull",
-                    "side": "parent"
-                },
-                {
                     "key": "restaurant",
                     "type": "relationship",
                     "required": false,
@@ -730,6 +715,81 @@
                     "array": false,
                     "min": -1.7976931348623157e+308,
                     "max": 1.7976931348623157e+308,
+                    "default": null
+                },
+                {
+                    "key": "userName",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
+                },
+                {
+                    "key": "userId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 36,
+                    "default": null
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67ea605a001d045c96fc",
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "favorites",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "userId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                },
+                {
+                    "key": "itemId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 20,
+                    "default": null
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "67ec19260003054f94a4",
+            "$permissions": [],
+            "databaseId": "67dd045f0027aa53f550",
+            "name": "order_timeline",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "itemId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 36,
+                    "default": null
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 20,
                     "default": null
                 }
             ],

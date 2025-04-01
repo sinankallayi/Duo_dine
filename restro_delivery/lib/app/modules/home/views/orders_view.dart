@@ -17,7 +17,7 @@ class OrdersView extends GetView<HomeController> {
       }
       return RefreshIndicator(
         onRefresh: () async {
-          controller.loadOrders();
+          controller.getOrders();
         },
         child:
             controller.orderItemsModel.isEmpty
@@ -28,7 +28,7 @@ class OrdersView extends GetView<HomeController> {
 
                       TextButton.icon(
                         onPressed: () {
-                          controller.loadOrders();
+                          controller.getOrders();
                         },
                         icon: Icon(Icons.refresh),
                         label: Text('Refresh'),
