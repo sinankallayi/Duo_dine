@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/data.dart';
@@ -35,7 +34,7 @@ class InitController extends GetxController {
     try {
       await getUserInfo();
       
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
 
       if (user != null) {
         localStorage.read('isCustomer') == null

@@ -28,7 +28,7 @@ class SearchScreen extends GetView<SearchScreenController> {
               Form(
                 child: TextFormField(
                   onChanged: (value) async {
-                    await Future.delayed(const Duration(milliseconds: 600));
+                    // await Future.delayed(const Duration(milliseconds: 600));
                     if (value.length >= 3) {
                       controller.searchRestaurants(value);
                     }

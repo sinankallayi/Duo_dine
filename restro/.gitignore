@@ -64,3 +64,4 @@ Thumbs.db
 
 build/
 .flutter-plugins-dependencies
+lib/config.dart

@@ -94,11 +94,12 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                               arguments: controller.orders[index]);
                         },
                         child: OrderedItemCard(
-                          title: DateFormat('dd-MM-yyyy')
+                          title: DateFormat('dd-MM-yyyy hh:MM A')
                               .format(controller.orders[index].createdDate),
-                          description: controller.orders[index].restaurant
-                              .map((element) => element.name)
-                              .join(', '),
+                              description: 'items',
+                          // description: controller.orders[index].restaurant
+                          //     .map((element) => element.name)
+                          //     .join(', '),
                           numOfItem: 1,
                           price: controller.orders[index].total_price,
                         ),

@@ -59,7 +59,8 @@ class Body extends StatelessWidget {
                 press: () async {
                   await localStorage.write('isCustomer', false);
                   isCustomer = false;
-                  Restart.restartApp();
+                  Get.offAll(const SplashView());
+                  // Restart.restartApp();
                 },
               ),
               ProfileMenuCard(

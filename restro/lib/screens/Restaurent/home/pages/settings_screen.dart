@@ -20,7 +20,8 @@ class SettingsScreen extends GetView {
             onTap: () async {
               await localStorage.write('isCustomer', true);
               // restart application
-              Restart.restartApp();
+              // Restart.restartApp();
+              Get.offAll(const SplashView());
             },
           ),
           const ListTile(
