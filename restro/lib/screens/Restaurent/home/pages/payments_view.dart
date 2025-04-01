@@ -30,12 +30,11 @@ class PaymentsView extends StatelessWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text('Transaction ID: ${payment.transactionId}'),
                     Text('Status: ${payment.status}'),
                     Text('User: ${payment.userName}'),
-                   
                   ],
                 ),
-              
               ),
             );
           },

@@ -1,7 +1,11 @@
 import 'package:foodly_ui/models/restaurant_model.dart';
+import 'package:uuid/uuid.dart';
 
 class Payment {
+  static const Uuid _uuid = Uuid();
+
   String id;
+  String transactionId;
   String status;
   String userId;
   String userName;
@@ -15,7 +19,8 @@ class Payment {
     required this.userName,
     required this.restaurant,
     required this.amount,
-  });
+  }): transactionId =
+            _uuid.v4().substring(0, 8);
 
   // Convert JSON to Payment object
   factory Payment.fromJson(Map<String, dynamic> json) {

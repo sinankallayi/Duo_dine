@@ -1,8 +1,13 @@
+import 'package:uuid/uuid.dart';
+
 class Payment {
+  static const Uuid _uuid = Uuid();
+
   String id;
+  String transactionId;
   String status;
   String userId;
-  String userName; // Keep userName separate
+  String userName;
   String restaurantId;
   String restaurantName;
   double amount;
@@ -11,21 +16,22 @@ class Payment {
     required this.id,
     required this.status,
     required this.userId,
-    this.userName = 'Unknown User', // Default if name isn't found
+    this.userName = 'Unknown User',
     required this.restaurantId,
     required this.restaurantName,
     required this.amount,
-  });
+  }) : transactionId =
+            _uuid.v4().substring(0, 8); // Always generate a new transaction ID
 
   factory Payment.fromJson(Map<String, dynamic> json) {
     return Payment(
       id: json['\$id'] ?? '',
       status: json['status'] ?? '',
-      userId: json['userId'] ?? '', // If it's a map, extract the ID
+      userId: json['userId'] ?? '',
       userName: json['userName'] ?? '',
       restaurantId: json['restaurant'] is String
           ? json['restaurant']
-          : (json['restaurant']?['\$id'] ?? ''), // Extract ID from map
+          : (json['restaurant']?['\$id'] ?? ''),
       restaurantName:
           json['restaurant'] is Map ? (json['restaurant']?['name'] ?? '') : '',
       amount: (json['amount'] is int)
