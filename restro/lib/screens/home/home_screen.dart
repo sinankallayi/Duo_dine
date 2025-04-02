@@ -144,7 +144,8 @@ class HomeScreen extends GetView<HomeScreenController> {
               SectionTitle(
                   title: "All Restaurants",
                   press: () {
-                    Get.to(const SearchScreen());
+                    controller.getRestaurents();
+                    // Get.to(const SearchScreen());
                   }),
               const SizedBox(height: 16),
 

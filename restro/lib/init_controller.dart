@@ -14,9 +14,7 @@ class InitController extends GetxController {
       await getUserInfo();
       NotificationService(); // Initialize notifications
       if (user != null) {
-        localStorage.read('isCustomer') == null
-            ? isCustomer = true
-            : isCustomer = localStorage.read('isCustomer');
+        isCustomer = localStorage.read('isCustomer') ?? true;
 
         if (isCustomer) {
           Get.offAll(() => const EntryPoint());

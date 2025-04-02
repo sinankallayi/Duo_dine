@@ -3,6 +3,7 @@ import 'package:appwrite/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/data.dart';
+import 'package:get/get.dart';
 
 Future<void> login({required String email, required String password}) async {
   // login logic
@@ -25,19 +26,18 @@ Future<void> logout() async {
   } on AppwriteException catch (e) {
     debugPrint('Logout failed: ${e.message}');
   }
-
 }
 
 Future<void> register(
-    {required String? name,
-    required String? email,
-    required String? password}) async {
+    {required String? name, required String? email, required String? password}) async {
   // register logic
   debugPrint('Registering user...');
   try {
-    user = await account.create(
-        userId: ID.unique(), email: email!, password: password!, name: name!);
+    user =
+        await account.create(userId: ID.unique(), email: email!, password: password!, name: name!);
+    await account.createEmailPasswordSession(email: email, password: password);
   } on AppwriteException catch (e) {
+    Get.snackbar("Error", e.message ?? "", colorText: Colors.red);
     debugPrint('Error: ${e.message}');
   }
 }
@@ -47,7 +47,6 @@ Future getUserInfo() async {
   try {
     user = await account.get();
   } on AppwriteException catch (e) {
-    await account.updateSession(sessionId: 'current');
     debugPrint('Error: ${e.message}');
   }
 }

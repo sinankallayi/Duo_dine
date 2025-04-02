@@ -23,9 +23,10 @@ class OrdersView extends GetView<HomeController> {
             controller.orderItemsModel.isEmpty
                 ? Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('No orders available'),
-
+                  
                       TextButton.icon(
                         onPressed: () {
                           controller.getOrders();

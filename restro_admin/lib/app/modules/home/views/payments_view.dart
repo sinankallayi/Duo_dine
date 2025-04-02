@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restro_admin/app/modules/home/controllers/payment_controller.dart';
 
+import 'refresh_button.dart';
+
 class PaymentsView extends StatelessWidget {
   final PaymentController controller = Get.put(PaymentController());
 
@@ -10,7 +12,12 @@ class PaymentsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Payments')),
+      appBar: AppBar(
+        title: const Text('Payments'),
+        actions: [
+          RefreshButton(onTap: () => {controller.loadPayments()})
+        ],
+      ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -33,8 +40,7 @@ class PaymentsView extends StatelessWidget {
                     Text('Transaction ID: ${payment.transactionId}'),
                     Text('Status: ${payment.status}'),
                     Text('User: ${payment.userName}'), // Display username
-                    Text(
-                        'Restaurant: ${payment.restaurantName}'), // Display restaurant name
+                    Text('Restaurant: ${payment.restaurantName}'), // Display restaurant name
                   ],
                 ),
               ),
