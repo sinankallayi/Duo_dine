@@ -13,6 +13,7 @@ import 'dart:convert';
 import '../../../../models/enums/delivery_status.dart';
 import '../../../../models/enums/order_status.dart';
 import '../../../../services/db_service.dart';
+import '../../../../services/notification_service.dart';
 
 class OrdersController extends GetxController {
   RxBool isLoading = true.obs;
@@ -84,21 +85,12 @@ class OrdersController extends GetxController {
           "description": nextStatus.statusText,
         },
       );
-
-      await functions.createExecution(
-        functionId: funId,
-        body: jsonEncode({
-          'title': 'Order Status Updated',
-          'body': 'The status of your order has been updated to $nextStatus',
-          'users': getId(orderItem.orders.user),
-        }),
-        path: sendMsgPath,
-      );
+      getOrders();
+      NotificationService.sendPushNotification('Order Status Updated',
+          'The status of your order has been updated to $nextStatus', getId(orderItem.orders.user));
     } on AppwriteException catch (e) {
       print(e.message);
     }
-
-    getOrders();
   }
 
   Future<void> updateDeliveryPersonStatus(
@@ -112,15 +104,10 @@ class OrdersController extends GetxController {
         data: {'deliveryStatus': nextStatus.value},
       );
 
-      await functions.createExecution(
-        functionId: funId,
-        body: jsonEncode({
-          'title': 'Delivery Status Updated',
-          'body': 'The status of your delivery has been updated to $nextStatus',
-          'users': getId(orderItem.orders.user),
-        }),
-        path: sendMsgPath,
-      );
+      NotificationService.sendPushNotification(
+          nextStatus.statusText,
+          'The status of your delivery has been updated to ${nextStatus.statusText}',
+          getId(orderItem.orders.user));
     } on AppwriteException catch (e) {
       print(e.message);
     }

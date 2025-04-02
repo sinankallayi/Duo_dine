@@ -12,6 +12,7 @@ import 'package:foodly_ui/screens/orderDetails/order_details_controller.dart';
 import 'package:get/get.dart';
 
 import '../models/enums/order_status.dart';
+import '../services/notification_service.dart';
 
 class PaymentController extends GetxController {
   var args;
@@ -77,15 +78,8 @@ class PaymentController extends GetxController {
 
     var userId = user?.$id;
     if (userId != null) {
-      await functions.createExecution(
-        functionId: funId,
-        body: jsonEncode({
-          'title': 'New Order Placed',
-          'body': '${items.length} ${items.length == 1 ? "item" : "items"} | Amount: ₹$price',
-          'users': userId,
-        }),
-        path: sendMsgPath,
-      );
+      NotificationService.sendPushNotification('New Order Placed',
+          '${items.length} ${items.length == 1 ? "item" : "items"} | Amount: ₹$price', userId);
     }
 
     isProcessing.value = false;
@@ -120,7 +114,7 @@ class PaymentController extends GetxController {
     // Group items by restaurantId and sum the amount
     Map<String, double> restaurantPayments = {};
     Map<String, int> restaurantItemCount = {};
-    
+
     //Grouping Restaurants
     for (var item in items) {
       String restaurantId = item.item.restaurant.id;
@@ -151,16 +145,11 @@ class PaymentController extends GetxController {
       });
       log("Created payment for restaurant: ${entry.key}, Amount: ${entry.value}");
 
-       var restaurantOwnerId = restaurantId;
-      await functions.createExecution(
-        functionId: funId,
-        body: jsonEncode({
-          'title': 'New Order Placed',
-          'body': '${itemCount} ${itemCount == 1 ? "item" : "items"} | Amount: ₹$amount',
-          'users': restaurantOwnerId,
-        }),
-        path: sendMsgPath,
-      );
+      var restaurantOwnerId = restaurantId;
+      NotificationService.sendPushNotification(
+          'New Order Placed',
+          '${itemCount} ${itemCount == 1 ? "item" : "items"} | Amount: ₹$amount',
+          restaurantOwnerId);
     }
   }
 

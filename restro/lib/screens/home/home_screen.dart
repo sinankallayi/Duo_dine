@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:foodly_ui/components/current_user_view.dart';
 import 'package:foodly_ui/data.dart';
 import 'package:foodly_ui/screens/details/details_screen.dart';
 import 'package:foodly_ui/screens/home/home_controller.dart';
@@ -32,21 +33,8 @@ class HomeScreen extends GetView<HomeScreenController> {
             .slide(),
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(children: [
-              if (user != null)
-                const Icon(
-                  CupertinoIcons.person,
-                  color: Colors.black,
-                ),
-              Text(
-                user?.name ?? "Guest",
-                style: Theme.of(context).textTheme.bodyLarge,
-              )
-            ]),
-          )
+        actions: const [
+          CurrentUserView()
         ],
       ),
       // appBar: AppBar(

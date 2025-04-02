@@ -586,18 +586,6 @@
                     "default": null
                 },
                 {
-                    "key": "users",
-                    "type": "relationship",
-                    "required": false,
-                    "array": false,
-                    "relatedCollection": "67935d0b000fcda8cb7f",
-                    "relationType": "manyToOne",
-                    "twoWay": false,
-                    "twoWayKey": "67c4163d003acebd33e5",
-                    "onDelete": "setNull",
-                    "side": "parent"
-                },
-                {
                     "key": "complaints",
                     "type": "string",
                     "required": false,
@@ -612,6 +600,14 @@
                     "array": false,
                     "min": -9223372036854775808,
                     "max": 9223372036854775807,
+                    "default": null
+                },
+                {
+                    "key": "users",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
                     "default": null
                 }
             ],
@@ -732,6 +728,14 @@
                     "array": false,
                     "size": 36,
                     "default": null
+                },
+                {
+                    "key": "transactionId",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 40,
+                    "default": null
                 }
             ],
             "indexes": []
@@ -770,7 +774,12 @@
         },
         {
             "$id": "67ec19260003054f94a4",
-            "$permissions": [],
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ],
             "databaseId": "67dd045f0027aa53f550",
             "name": "order_timeline",
             "enabled": true,
@@ -790,6 +799,14 @@
                     "required": true,
                     "array": false,
                     "size": 20,
+                    "default": null
+                },
+                {
+                    "key": "description",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 300,
                     "default": null
                 }
             ],

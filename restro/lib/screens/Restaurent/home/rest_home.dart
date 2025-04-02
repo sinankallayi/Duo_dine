@@ -10,6 +10,8 @@ import 'package:foodly_ui/screens/Restaurent/home/pages/profile_screen.dart';
 import 'package:foodly_ui/screens/Restaurent/home/pages/settings_screen.dart';
 import 'package:get/get.dart';
 
+import '../../../components/current_user_view.dart';
+
 class RestHomeScreen extends StatefulWidget {
   const RestHomeScreen({super.key});
 
@@ -60,6 +62,7 @@ class _RestHomeScreenState extends State<RestHomeScreen> {
                 onPressed: () {
                   Get.put(OrdersController()).getOrders();
                 }),
+                const CurrentUserView()
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
