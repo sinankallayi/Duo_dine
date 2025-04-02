@@ -39,6 +39,7 @@ dependencies:
   flutter_svg: ^2.0.17
   flutter_animate: ^4.5.2
   uuid: ^4.1.0
+  flutter_launcher_icons: ^0.14.3
 dependency_overrides:
   flutter_web_auth_2: 4.0.1
 
@@ -95,3 +96,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# To update image change the image from the path and run command
+# dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/icons/app_icon.png"
