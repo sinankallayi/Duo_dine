@@ -12,6 +12,8 @@ import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../../functions/color_utils.dart';
+import '../details/components/featured_items.dart';
+import '../featured/featurred_screen.dart';
 import 'components/promotion_banner.dart';
 
 class HomeScreen extends GetView<HomeScreenController> {
@@ -98,7 +100,9 @@ class HomeScreen extends GetView<HomeScreenController> {
               // const MediumCardList(),
               // const SizedBox(height: 20),
               // Banner
-              const PromotionBanner(),
+              // const PromotionBanner(),
+              const SizedBox(height: 16),
+              const FeaturedItems(),
               const SizedBox(height: 20),
               Obx(() {
                 String intro = controller.intro.value;
@@ -139,8 +143,8 @@ class HomeScreen extends GetView<HomeScreenController> {
               //   ),
               // ),
               // const SizedBox(height: 16),
-              // const MediumCardList(),
-              // const SizedBox(height: 20),
+              // const FeaturedItems(),
+              const SizedBox(height: 20),
               SectionTitle(
                   title: "All Restaurants",
                   press: () {

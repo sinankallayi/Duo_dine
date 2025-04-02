@@ -28,22 +28,27 @@ class SectionTitle extends StatelessWidget {
                 ? Theme.of(context).textTheme.titleLarge
                 : Theme.of(context).textTheme.titleMedium,
           ),
-          GestureDetector(
-            onTap: press,
-            child: Text(
-              isMainSection ? "Refresh" : "Clear all".toUpperCase(),
-              style: isMainSection
-                  ? Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: primaryColor)
-                  : TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: titleColor.withOpacity(0.64),
-                    ),
-            ),
-          ),
+          TextButton.icon(
+            onPressed: press,
+            label: const Text("Refresh"),
+            icon: const Icon(Icons.refresh, color: primaryColor),
+          )
+          // GestureDetector(
+          //   onTap: press,
+          //   child: Text(
+          //     isMainSection ? "Refresh" : "Clear all".toUpperCase(),
+          //     style: isMainSection
+          //         ? Theme.of(context)
+          //             .textTheme
+          //             .bodyMedium!
+          //             .copyWith(color: primaryColor)
+          //         : TextStyle(
+          //             fontSize: 12,
+          //             fontWeight: FontWeight.w500,
+          //             color: titleColor.withOpacity(0.64),
+          //           ),
+          //   ),
+          // ),
         ],
       ),
     );

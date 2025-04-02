@@ -9,15 +9,16 @@ class FeaturedItemCard extends StatelessWidget {
     required this.image,
     required this.press,
     required this.title,
+    required this.restaurantName,
   });
 
-  final String foodType, image, title;
+  final String foodType, image, title, restaurantName;
   final VoidCallback press;
 
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = Theme.of(context).textTheme.labelLarge!.copyWith(
-          color: titleColor.withOpacity(0.64),
+          color: titleColor.withAlpha(120),
           fontWeight: FontWeight.normal,
         );
     return InkWell(
@@ -34,7 +35,7 @@ class FeaturedItemCard extends StatelessWidget {
                 aspectRatio: 1,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: Image.asset(
+                  child: Image.network(
                     image,
                     fit: BoxFit.cover,
                   ),
@@ -48,10 +49,18 @@ class FeaturedItemCard extends StatelessWidget {
                     .bodyMedium
                     ?.copyWith(color: titleColor, fontWeight: FontWeight.w500),
               ),
-              const SizedBox(height: 8),
-              Row(
+              const SizedBox(height: 4),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(foodType, style: textStyle)
+                  Text(foodType, style: textStyle),
+                  Row(
+                    children: [
+                      Icon(Icons.food_bank_rounded, size: 16, color: primaryColor.withAlpha(120)),
+                      const SizedBox(width: 4),
+                      Text(restaurantName, style: textStyle),
+                    ],
+                  )
                 ],
               ),
             ],

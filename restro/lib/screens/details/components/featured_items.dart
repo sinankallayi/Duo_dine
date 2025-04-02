@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/screens/details/details_controller.dart';
 import 'package:get/get.dart';
 
+import '../../../components/section_title.dart';
 import '../../../constants.dart';
+import '../../addToOrder/add_to_order_screen.dart';
+import 'featrued_items_controller.dart';
 import 'featured_item_card.dart';
 
-class FeaturedItems extends GetView<DetailsController> {
+class FeaturedItems extends GetView<FeaturedItemsController> {
   const FeaturedItems({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    Get.put(FeaturedItemsController());
     return Obx(() {
       if (controller.featuredItems.isEmpty) {
         return const SizedBox.shrink();
@@ -19,28 +22,31 @@ class FeaturedItems extends GetView<DetailsController> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Text("Featured Items",
-                style: Theme.of(context).textTheme.titleLarge),
-          ),
+          SectionTitle(
+              title: "Featured",
+              press: () {
+                controller.loadFeatured();
+              }),
           const SizedBox(height: defaultPadding / 2),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
                 ...List.generate(
-                  controller.featuredItems.length, // for demo we use 3
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(left: defaultPadding),
-                    child: FeaturedItemCard(
-                      title: controller.featuredItems[index].name,
-                      // image: "https://cloud.appwrite.io/v1/storage/buckets/$itemsBucketId/files/${controller.featuredItems[index].imageId}/view?project=restro",
-                      image: getImageUrl(controller.featuredItems[index].imageId),
-                      foodType: controller.featuredItems[index].category,
-                      press: () {},
-                    ),
-                  ),
+                  controller.featuredItems.length,
+                  (index) {
+                    var item = controller.featuredItems[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(left: defaultPadding),
+                      child: FeaturedItemCard(
+                        title: item.name,
+                        image: getImageUrl(item.imageId),
+                        foodType: item.category,
+                        restaurantName: item.restaurant.name,
+                        press: () => Get.to(() => AddToOrderScrreen(item: item)),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(width: defaultPadding),
               ],

@@ -18,7 +18,7 @@ class DetailsController extends GetxController {
 
   @override
   void onReady() async {
-    await loadItems();
+    loadItems();
     userId = user?.$id;
     if (userId != null) {
       await loadFavorites();
@@ -27,13 +27,13 @@ class DetailsController extends GetxController {
   }
 
   Future<void> loadItems() async {
+    var restaurantId = restaurant?.id;
+    if (restaurantId == null) return;
     isLoading.value = true;
     try {
-      final fetchedItems = await db.getAvailableItemsForRestaurant(restaurant!.id);
+      final fetchedItems = await db.getAvailableItemsForRestaurant(restaurantId);
       items.assignAll(fetchedItems);
       updateFavoriteStatus(items);
-      // featuredItems.assignAll(fetchedItems.where((item) => item.featured!).toList());
-      // updateFavoriteStatus(featuredItems);
 
       print('Items loaded: ${items.length}');
     } catch (e) {
@@ -52,9 +52,9 @@ class DetailsController extends GetxController {
         favoriteItems.assignAll(fetchedItems);
         updateFavoriteStatus(favoriteItems);
 
-        print('Items loaded: ${items.length}');
+        print('Fav Items loaded: ${items.length}');
       } catch (e) {
-        print('Error loading items: $e');
+        print('Error loading fav items: $e');
       }
       isLoading.value = false;
     }

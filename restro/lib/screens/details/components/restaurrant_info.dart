@@ -25,7 +25,7 @@ class RestaurantInfo extends StatelessWidget {
             maxLines: 1,
           ),
           const SizedBox(height: defaultPadding / 2),
-          PriceRangeAndFoodtype(
+          if(restaurant.tags.isNotEmpty) PriceRangeAndFoodtype(
             foodType: restaurant.tags.split(','),
           ),
           const SizedBox(height: defaultPadding / 2),

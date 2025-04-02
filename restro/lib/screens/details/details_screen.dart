@@ -39,7 +39,7 @@ class DetailsScreen extends GetView<DetailsController> {
                       const SizedBox(height: defaultPadding / 2),
                       RestaurantInfo(restaurant: restaurant),
                       const SizedBox(height: defaultPadding),
-                      const FeaturedItems(),
+                      // const FeaturedItems(),
                       const Items()
                     ],
                   ),

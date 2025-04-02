@@ -38,6 +38,7 @@ class DbService {
         await db.listDocuments(databaseId: dbId, collectionId: itemsCollection, queries: [
       Query.equal('\$id', itemIds),
       Query.equal('availability', true),
+      Query.orderDesc('\$createdAt'),
     ]);
 
     return result.documents.map((doc) => MenuItemModel.fromJson(doc.data)).toList();
@@ -59,6 +60,15 @@ class DbService {
       databaseId: databaseId,
       collectionId: favoritesCollection,
       queries: [Query.equal('userId', userId)],
+    );
+
+    return result.documents.map((doc) => doc.data['itemId'] as String).toList();
+  }
+
+  Future<List<String>> getFeaturedItemIds() async {
+    final result = await db.listDocuments(
+      databaseId: databaseId,
+      collectionId: favoritesCollection
     );
 
     return result.documents.map((doc) => doc.data['itemId'] as String).toList();
