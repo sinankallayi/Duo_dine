@@ -6,6 +6,7 @@ import 'package:foodly_ui/screens/Restaurent/home/controllers/items_controller.d
 import 'package:foodly_ui/screens/Restaurent/home/controllers/orders_controller.dart';
 import 'package:foodly_ui/screens/Restaurent/home/pages/items_screen.dart';
 import 'package:foodly_ui/screens/Restaurent/home/pages/orders_screen.dart';
+import 'package:foodly_ui/screens/Restaurent/home/pages/profile_screen.dart';
 import 'package:foodly_ui/screens/Restaurent/home/pages/settings_screen.dart';
 import 'package:get/get.dart';
 
@@ -86,17 +87,6 @@ class _RestHomeScreenState extends State<RestHomeScreen> {
         inactiveColor: bodyTextColor,
         onTap: _onItemTapped,
       ),
-    );
-  }
-}
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Profile Screen'),
     );
   }
 }
