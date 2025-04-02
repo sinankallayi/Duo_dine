@@ -11,7 +11,7 @@ class SplashView extends GetView<InitController> {
   Widget build(BuildContext context) {
     controller.check();
     return Scaffold(
-      body: Center(
+      body: const Center(
         child: Text(
           'Duo Dine',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),

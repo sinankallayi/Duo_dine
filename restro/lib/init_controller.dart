@@ -13,29 +13,10 @@ import 'package:get/get.dart';
 FirebaseMessaging fcm_messaging = FirebaseMessaging.instance;
 
 class InitController extends GetxController {
-  final count = 0.obs;
-  @override
-  Future<void> onInit() async {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> check() async {
     log('Checking user info');
     try {
       await getUserInfo();
-      
-      // await Future.delayed(const Duration(seconds: 2));
-
       if (user != null) {
         localStorage.read('isCustomer') == null
             ? isCustomer = true
