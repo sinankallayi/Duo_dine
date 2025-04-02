@@ -128,6 +128,11 @@ class NotificationService {
           identifier: token,
           providerId: notifcationProviderId,
         );
+        await messaging.createSubscriber(
+          topicId: notifcationsTopic,
+          subscriberId: ID.unique(),
+          targetId: user!.$id,
+        );
         debugPrint("FCM Token registered in Appwrite: $token");
       }
     } on AppwriteException catch (e) {

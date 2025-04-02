@@ -100,7 +100,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 _formKey.currentState!.save();
                 await register(name: _fullName, email: _email, password: _password);
                 if (user != null) {
-                  Get.offAll(const ChooseTypeScreen());
+                  Get.offAll(() => const ChooseTypeScreen());
                 }
               }
             },
