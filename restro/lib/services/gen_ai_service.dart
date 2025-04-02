@@ -52,7 +52,7 @@ class GenAiService {
   List<String> introPrompts = [
     '''Create a short intro for a food delivery app with emojis. Make it fun, engaging and creative text. ''',
     '''Generate a fun, engaging, and highly creative short intro for a food delivery app using emojis. Make it catchy and appetizing! Ensure it feels exciting, mouthwatering, and dynamic. ''',
-    '''Create a captivating and delicious intro for a food delivery app with emojis. Make it fun, engaging and creative text. ''',
+    '''Create a captivating, delicious and dramatic intro for a food delivery app with emojis. Make it fun, engaging and creative text. ''',
 
   ];
   // Example usage:
@@ -60,8 +60,8 @@ class GenAiService {
   // String notification = await genAiService.generateIntro();
   Future<String> generateIntro() async {
     try {
-      const language = "Malayalam";
-      const addtional = "Give only happy and inviting results. Provide a response in $language plain text and emojis only (under 160 characters) , without JSON formatting or structured output.";
+      const language = "English";
+      const addtional = "Give only positive and inviting results. Provide a response in $language plain text and emojis only (under 160 characters) , without JSON formatting or structured output.";
       final prompt = introPrompts[Random().nextInt(introPrompts.length)];
 
       final content = [Content.text(prompt + addtional)];

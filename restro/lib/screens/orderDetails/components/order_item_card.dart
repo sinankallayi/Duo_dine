@@ -9,10 +9,12 @@ class OrderedItemCard extends StatelessWidget {
     required this.title,
     required this.description,
     required this.price,
+    this.status,
   });
   final int numOfItem;
   final String? title, description;
   final double? price;
+  final String? status;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class OrderedItemCard extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            NumOfItems(numOfItem: numOfItem),
+            if (numOfItem > 0) NumOfItems(numOfItem: numOfItem),
             const SizedBox(width: defaultPadding * 0.75),
             Expanded(
               child: Column(
@@ -42,17 +44,18 @@ class OrderedItemCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: defaultPadding / 2),
-            Text(
-              "₹$price",
-              style: Theme.of(context)
-                  .textTheme
-                  .labelSmall!
-                  .copyWith(color: primaryColor),
+            Column(
+              children: [
+                Text(
+                  "₹$price",
+                  style: Theme.of(context).textTheme.labelSmall!.copyWith(color: primaryColor),
+                ),
+                if (status != null) Text(status ?? "")
+              ],
             )
           ],
         ),
         const SizedBox(height: defaultPadding / 2),
-        const Divider(),
       ],
     );
   }
@@ -74,15 +77,11 @@ class NumOfItems extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(4)),
-        border: Border.all(
-            width: 0.5, color: const Color(0xFF868686).withOpacity(0.3)),
+        border: Border.all(width: 0.5, color: const Color(0xFF868686).withOpacity(0.3)),
       ),
       child: Text(
         numOfItem.toString(),
-        style: Theme.of(context)
-            .textTheme
-            .labelLarge!
-            .copyWith(color: primaryColor),
+        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: primaryColor),
       ),
     );
   }

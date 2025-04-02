@@ -128,9 +128,9 @@ class OrderItemCard extends StatelessWidget {
                       return const SizedBox.shrink();
                     }
                     return ActionButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        await updateOrderStatus(orderItem, action.nextStatus);
                         action.onTap(orderItem);
-                        updateOrderStatus(orderItem, action.nextStatus);
                       },
                       iconColor: action.color,
                       icon: action.icon,
@@ -141,8 +141,9 @@ class OrderItemCard extends StatelessWidget {
                   }),
                   if (orderItem.isConfirmedButNotAssigned())
                     ActionButton(
-                      onPressed: () {
-                        assignDeliveryPerson(orderItem);
+                      onPressed: () async {
+                        await assignDeliveryPerson(orderItem);
+                        orderItem.assignDriver.onTap(orderItem);
                       },
                       iconColor: orderItem.assignDriver.color,
                       icon: orderItem.assignDriver.icon,

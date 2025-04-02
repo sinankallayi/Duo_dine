@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/models/enums/order_status.dart';
 import 'package:foodly_ui/screens/orderDetails/order_timeline/timeline_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
 class TimelineScreen extends GetView<TimelineController> {
@@ -14,8 +16,7 @@ class TimelineScreen extends GetView<TimelineController> {
       appBar: AppBar(
         title: const Text('Order Timeline'),
         actions: [
-          Text("₹${controller.item!.items.price * controller.item!.qty}")
-              .paddingOnly(right: 16),
+          Text("₹${controller.item!.items.price * controller.item!.qty}").paddingOnly(right: 16),
         ],
       ),
       body: Padding(
@@ -47,10 +48,9 @@ class TimelineScreen extends GetView<TimelineController> {
                   ),
                 ),
 
-                Text(
-                    "Restaurent Name: ${controller.item!.items.restaurant.name}"),
+                Text("Restaurent Name: ${controller.item!.items.restaurant.name}"),
 
-                Divider(
+                const Divider(
                   height: 20,
                 ),
                 FixedTimeline.tileBuilder(
@@ -66,25 +66,24 @@ class TimelineScreen extends GetView<TimelineController> {
                     ),
                   ),
                   builder: TimelineTileBuilder.connected(
-                    itemCount: controller.timelineItems.length,
+                    itemCount: controller.orderTimeline.length,
                     contentsBuilder: (context, index) {
-                      final item = controller.timelineItems[index];
+                      final item = controller.orderTimeline[index];
                       return Padding(
-                        padding:
-                            const EdgeInsets.only(left: 16.0, bottom: 24.0),
+                        padding: const EdgeInsets.only(left: 16.0, bottom: 24.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item.title,
+                              item.status.statusText,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                             ),
                             const SizedBox(height: 4),
-                            Text(
-                              item.description,
+                            if(item.createdDate !=null) Text(
+                               DateFormat('dd MMM yyyy h:mm a').format(item.createdDate!),
                               style: TextStyle(
                                 color: Colors.grey.shade600,
                                 fontSize: 14,
@@ -95,11 +94,10 @@ class TimelineScreen extends GetView<TimelineController> {
                       );
                     },
                     indicatorBuilder: (context, index) {
+                      final item = controller.orderTimeline[index];
                       return DotIndicator(
-                        color: controller.timelineItems[index].isCompleted
-                            ? Colors.green
-                            : Colors.grey,
-                        child: controller.timelineItems[index].isCompleted
+                        color: item.isCompleted ? Colors.green : Colors.grey,
+                        child: item.isCompleted
                             ? const Icon(
                                 Icons.check,
                                 color: Colors.white,
@@ -109,7 +107,8 @@ class TimelineScreen extends GetView<TimelineController> {
                       );
                     },
                     connectorBuilder: (context, index, type) {
-                      if (controller.timelineItems[index].isCompleted) {
+                      final item = controller.orderTimeline[index];
+                      if (item.isCompleted) {
                         return const SolidLineConnector(
                           color: Colors.green,
                         );

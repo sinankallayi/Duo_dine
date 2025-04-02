@@ -32,14 +32,14 @@ class OrdersScreen extends GetView<OrdersController> {
                     assignDeliveryPerson: (OrderItemsModel orderItem) {
                       controller.showDeliveryPersons(orderItem);
                     },
-                    updateOrderStatus: (OrderItemsModel orderItem, OrderStatus nextStatus) {
+                    updateOrderStatus: (OrderItemsModel orderItem, OrderStatus nextStatus) async{
                       print("updating order status to ${nextStatus.value}");
-                      controller.updateOrderStatus(orderItem, nextStatus);
+                      await controller.updateOrderStatus(orderItem, nextStatus);
                     },
                     updateDeliveryPersonStatus:
-                        (OrderItemsModel orderItem, DeliveryStatus nextStatus) {
+                        (OrderItemsModel orderItem, DeliveryStatus nextStatus) async {
                       print("updating order status to ${nextStatus.value}");
-                      controller.updateDeliveryPersonStatus(orderItem, nextStatus);
+                      await controller.updateDeliveryPersonStatus(orderItem, nextStatus);
                     }),
               );
             },

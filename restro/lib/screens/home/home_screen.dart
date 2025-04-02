@@ -121,19 +121,23 @@ class HomeScreen extends GetView<HomeScreenController> {
                         child: GestureDetector(
                           onTap: controller.generateIntroText,
                           child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: controller.introBg.value.withAlpha(30),
-                                border: Border.all(width: 3, color: controller.introBg.value),
-                                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                              ),
-                              child: Text(
-                                intro,
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-                              )
-                                  .animate(target: controller.introLoading.value ? 1 : 0)
-                                  .fade(end: 0.5)),
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: controller.introBg.value.withAlpha(30),
+                                    border: Border.all(width: 3, color: controller.introBg.value),
+                                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                  ),
+                                  child: Text(
+                                    intro,
+                                    style:
+                                        const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                  )
+                                      .animate(target: controller.introLoading.value ? 1 : 0)
+                                      .fade(end: 0.5))
+                              .animate()
+                              .fadeIn(duration: 1200.ms, curve: Curves.easeOutQuad)
+                              .slide(),
                         ),
                       );
               }),

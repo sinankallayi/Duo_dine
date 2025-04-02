@@ -23,7 +23,7 @@ class OrderModel {
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
       $id: json['\$id'],
-      createdDate: DateTime.parse(json['\$createdAt']),
+      createdDate: DateTime.parse(json['\$createdAt']).toLocal(),
       // restaurant: List<Restaurant>.from(
       //     json['restaurant'].map((x) => Restaurant.fromJson(x))),
       total_price: double.parse(json['total_price'].toString()),

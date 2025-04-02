@@ -13,8 +13,7 @@ class AuthController extends GetxController {
     } on Exception catch (e) {
       print(e);
     }
-    print("RAZI ${user?.email}");
-    print("RAZI: labels ${user?.labels.contains('customer')}");
+
     if (user == null) {
       showLogin();
     } else {

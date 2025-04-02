@@ -1,6 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/constants.dart';
+import 'package:foodly_ui/models/enums/order_status.dart';
 import 'package:foodly_ui/models/order_items_model.dart';
 import 'package:foodly_ui/models/order_model.dart';
 import 'package:foodly_ui/screens/orderDetails/components/order_item_card.dart';
@@ -39,8 +40,7 @@ class Orders extends GetView<OrdersController> {
                 ...List.generate(
                   controller.items.length,
                   (index) => Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding / 2),
+                    padding: const EdgeInsets.symmetric(vertical: defaultPadding / 2),
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
@@ -52,10 +52,9 @@ class Orders extends GetView<OrdersController> {
                       child: OrderedItemCard(
                         title: controller.items[index].items.name,
                         description:
-                            "${controller.items[index].status} - click to view timeline",
+                            "${controller.items[index].status.statusText} - click to view timeline",
                         numOfItem: controller.items[index].qty,
-                        price: controller.items[index].items.price *
-                            controller.items[index].qty,
+                        price: controller.items[index].items.price * controller.items[index].qty,
                       ),
                     ),
                   ),
@@ -66,8 +65,7 @@ class Orders extends GetView<OrdersController> {
                   alignment: Alignment.centerRight,
                   child: Text(
                     "Total: ₹${controller.items.fold(0.0, (previousValue, element) => previousValue + element.items.price * element.qty)}",
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
                 // text field for complaints
@@ -125,9 +123,8 @@ class OrdersController extends GetxController {
           Query.equal("orders", item!.$id),
         ],
       );
-      for (var element in data.documents) {
-        items.add(OrderItemsModel.fromJson(element.data));
-      }
+
+      items.assignAll(data.documents.map((e) => OrderItemsModel.fromJson(e.data)).toList());
     } on AppwriteException catch (e) {
       debugPrint(e.message);
       debugPrint(e.response);
@@ -148,19 +145,16 @@ class OrdersController extends GetxController {
           },
         );
         complaintsController.clear();
-        Get.snackbar('Success', 'Complaint sent successfully',
-            snackPosition: SnackPosition.BOTTOM);
+        Get.snackbar('Success', 'Complaint sent successfully', snackPosition: SnackPosition.BOTTOM);
       } on AppwriteException catch (e) {
         debugPrint(e.message);
         debugPrint(e.response);
-        Get.snackbar('Error', 'Failed to send complaint',
-            snackPosition: SnackPosition.BOTTOM);
+        Get.snackbar('Error', 'Failed to send complaint', snackPosition: SnackPosition.BOTTOM);
       } finally {
         isSenting.value = false;
       }
     } else {
-      Get.snackbar('Error', 'Complaint cannot be empty',
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('Error', 'Complaint cannot be empty', snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

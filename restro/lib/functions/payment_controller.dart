@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:appwrite/appwrite.dart';
@@ -9,6 +10,8 @@ import 'package:foodly_ui/functions/auth.dart';
 import 'package:foodly_ui/models/cart_model.dart';
 import 'package:foodly_ui/screens/orderDetails/order_details_controller.dart';
 import 'package:get/get.dart';
+
+import '../models/enums/order_status.dart';
 
 class PaymentController extends GetxController {
   var args;
@@ -32,8 +35,7 @@ class PaymentController extends GetxController {
 
   Future<void> simulatePayment() async {
     if (!formKey.currentState!.validate()) {
-      Get.snackbar('Error', 'Please enter valid card details',
-          backgroundColor: Colors.red);
+      Get.snackbar('Error', 'Please enter valid card details', backgroundColor: Colors.red);
       return;
     }
 
@@ -73,6 +75,19 @@ class PaymentController extends GetxController {
       _createPayments(items, price, status),
     ]);
 
+    var userId = user?.$id;
+    if (userId != null) {
+      await functions.createExecution(
+        functionId: funId,
+        body: jsonEncode({
+          'title': 'New Order Placed',
+          'body': '${items.length} ${items.length == 1 ? "item" : "items"} | Amount: ₹$price',
+          'users': userId,
+        }),
+        path: sendMsgPath,
+      );
+    }
+
     isProcessing.value = false;
 
     final orderController = Get.put(OrderDetailsController());
@@ -87,17 +102,65 @@ class PaymentController extends GetxController {
     isProcessing.value = false;
   }
 
-  Future<void> _createPayments(
-      List<CartModel> items, double price, String status) async {
+  // Future<void> _createPayments(
+  //     List<CartModel> items, double price, String status) async {
+  //   for (var item in items) {
+  //     await _createDocument(paymentsCollection, ID.unique(), {
+  //       'userId': user!.$id,
+  //       'userName': user?.name ?? "customer",
+  //       'amount': double.parse(item.item.price.toStringAsFixed(2)),
+  //       'status': status,
+  //       'restaurant': item.item.restaurant.id,
+  //     });
+  //     log("Created payments: "+item.item.name);
+  //   }
+  // }
+
+  Future<void> _createPayments(List<CartModel> items, double price, String status) async {
+    // Group items by restaurantId and sum the amount
+    Map<String, double> restaurantPayments = {};
+    Map<String, int> restaurantItemCount = {};
+    
+    //Grouping Restaurants
     for (var item in items) {
+      String restaurantId = item.item.restaurant.id;
+      double amount = item.item.price;
+
+      if (restaurantPayments.containsKey(restaurantId)) {
+        restaurantPayments[restaurantId] = (restaurantPayments[restaurantId] ?? 0) + amount;
+        restaurantItemCount[restaurantId] = (restaurantItemCount[restaurantId] ?? 0) + 1;
+      } else {
+        restaurantPayments[restaurantId] = amount;
+        restaurantItemCount[restaurantId] = 1;
+      }
+    }
+
+    // Create a payment entry for each restaurant
+    var transactionId = ID.unique();
+    for (var entry in restaurantPayments.entries) {
+      var restaurantId = entry.key;
+      var amount = entry.value;
+      var itemCount = restaurantItemCount[entry.key];
       await _createDocument(paymentsCollection, ID.unique(), {
         'userId': user!.$id,
         'userName': user?.name ?? "customer",
-        'amount': double.parse(price.toStringAsFixed(2)),
+        'amount': double.parse(entry.value.toStringAsFixed(2)), // Final summed amount
         'status': status,
-        'restaurant': item.item.restaurant.id,
+        'restaurant': entry.key,
+        'transactionId': transactionId,
       });
-      log("Created payments: "+item.item.name);
+      log("Created payment for restaurant: ${entry.key}, Amount: ${entry.value}");
+
+       var restaurantOwnerId = restaurantId;
+      await functions.createExecution(
+        functionId: funId,
+        body: jsonEncode({
+          'title': 'New Order Placed',
+          'body': '${itemCount} ${itemCount == 1 ? "item" : "items"} | Amount: ₹$amount',
+          'users': restaurantOwnerId,
+        }),
+        path: sendMsgPath,
+      );
     }
   }
 
@@ -106,27 +169,35 @@ class PaymentController extends GetxController {
       await _deleteDocument(cartCollection, item.$id);
     }
   }
-  
+
   Future<void> _createOrderItems(List<CartModel> items, String orderId) async {
     for (var item in items) {
-      await _createDocument(orderItemsCollection, ID.unique(), {
+      var itemId = ID.unique();
+      await _createDocument(orderItemsCollection, itemId, {
         'orders': orderId,
         'items': item.item.$id,
         'qty': item.quantity,
         'restaurant': item.item.restaurant.id,
       });
-      log("Created orderItem: "+item.item.name);
+
+      await _createDocument(
+        orderTimelineCollection,
+        ID.unique(),
+        {
+          "itemId": itemId,
+          "status": OrderStatus.orderPlaced.value,
+          "description": OrderStatus.orderPlaced.statusText,
+        },
+      );
+
+      log("Created orderItem: " + item.item.name);
     }
   }
 
-  Future<void> _createDocument(
-      String collection, String docId, Map<String, dynamic> data) async {
+  Future<void> _createDocument(String collection, String docId, Map<String, dynamic> data) async {
     try {
       await db.createDocument(
-          databaseId: dbId,
-          collectionId: collection,
-          documentId: docId,
-          data: data);
+          databaseId: dbId, collectionId: collection, documentId: docId, data: data);
     } on AppwriteException catch (e) {
       log('Error creating document: ${e.code} - ${e.message}');
     }
@@ -134,8 +205,7 @@ class PaymentController extends GetxController {
 
   Future<void> _deleteDocument(String collection, String docId) async {
     try {
-      await db.deleteDocument(
-          databaseId: dbId, collectionId: collection, documentId: docId);
+      await db.deleteDocument(databaseId: dbId, collectionId: collection, documentId: docId);
     } on AppwriteException catch (e) {
       log('Error deleting document: ${e.code} - ${e.message}');
     }

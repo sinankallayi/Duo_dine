@@ -78,9 +78,9 @@ class OrdersView extends GetView<HomeController> {
                               children:
                                   deliveryStatus.actions.map((action) {
                                     return ElevatedButton.icon(
-                                      onPressed: () {
+                                      onPressed: () async{
+                                        await controller.changeStatus(orderItemsModel, action.nextStatus);
                                         action.onTap(orderItemsModel);
-                                        controller.changeStatus(orderItemsModel, action.nextStatus);
                                       },
                                       style: ElevatedButton.styleFrom(
                                         foregroundColor: action.color,

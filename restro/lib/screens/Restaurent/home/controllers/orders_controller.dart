@@ -128,34 +128,34 @@ class OrdersController extends GetxController {
     getOrders();
   }
 
-  Future<void> updateOrderStatusOld(id, String s, int index) async {
-    print("updating order status to $s");
-    isLoading.value = true;
-    try {
-      await db.updateDocument(
-        databaseId: dbId,
-        collectionId: orderItemsCollection,
-        documentId: id,
-        data: {
-          "status": s,
-        },
-      );
+  // Future<void> updateOrderStatusOld(id, String s, int index) async {
+  //   print("updating order status to $s");
+  //   isLoading.value = true;
+  //   try {
+  //     await db.updateDocument(
+  //       databaseId: dbId,
+  //       collectionId: orderItemsCollection,
+  //       documentId: id,
+  //       data: {
+  //         "status": s,
+  //       },
+  //     );
 
-      await functions.createExecution(
-        functionId: funId,
-        body: jsonEncode({
-          'title': 'Order Status Updated',
-          'body': 'The status of your order has been updated to $s',
-          'users': getId(orderItems[index].orders.user),
-        }),
-        path: sendMsgPath,
-      );
-    } on AppwriteException catch (e) {
-      print(e.message);
-    }
-    isLoading.value = false;
-    getOrders();
-  }
+  //     await functions.createExecution(
+  //       functionId: funId,
+  //       body: jsonEncode({
+  //         'title': 'Order Status Updated',
+  //         'body': 'The status of your order has been updated to $s',
+  //         'users': getId(orderItems[index].orders.user),
+  //       }),
+  //       path: sendMsgPath,
+  //     );
+  //   } on AppwriteException catch (e) {
+  //     print(e.message);
+  //   }
+  //   isLoading.value = false;
+  //   getOrders();
+  // }
 
   Future<void> assignDeliveryPerson(
       OrderItemsModel orderItemsModel, DeliveryPersonModel deliveryPerson) async {
@@ -237,6 +237,6 @@ class OrdersController extends GetxController {
     Match? match = regExp.firstMatch(jsonString!);
     String? id = match?.group(1);
 
-    return id ?? jsonString.$id ?? "";
+    return id;
   }
 }
