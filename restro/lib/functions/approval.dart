@@ -1,12 +1,16 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/data.dart';
+import 'package:foodly_ui/functions/auth.dart';
 import 'package:foodly_ui/models/restaurant_model.dart';
 
 checkApproval() async {
   // check if the user is approved
   String approvalStatus = 'pending';
   try {
+    if (user == null) {
+      await getUserInfo();
+    }else{
     var document = await db.getDocument(
       databaseId: dbId,
       collectionId: restaurantCollection,
@@ -18,6 +22,7 @@ checkApproval() async {
     if (document.data['approved'] == true) {
       approvalStatus = 'approved';
     }
+  }
   } on AppwriteException catch (e) {
     print('Error: ${e.message}');
     // Document with the requested ID could not be found.

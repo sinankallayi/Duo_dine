@@ -41,7 +41,7 @@ class ApprovalScreen extends GetView<ApprovalController> {
                 child: OutlinedButton(
                         onPressed: () async {
                           await localStorage.write('isCustomer', true);
-                          Get.offAll(const SplashView());
+                          Get.offAll(()=>const SplashView());
                         },
                         child: const Text('Sign in as Customer'),
                       ),

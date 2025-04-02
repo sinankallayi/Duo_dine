@@ -47,6 +47,7 @@ Future getUserInfo() async {
   try {
     user = await account.get();
   } on AppwriteException catch (e) {
+    await account.updateSession(sessionId: 'current');
     debugPrint('Error: ${e.message}');
   }
 }
