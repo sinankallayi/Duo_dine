@@ -49,12 +49,20 @@ class HomeController extends GetxController {
       var result = await databases.listDocuments(
         databaseId: dbId,
         collectionId: orderItemsCollection,
-        queries: [Query.equal('deliveryPerson', userId)],
+        queries: [
+          Query.equal('deliveryPerson', userId),
+          Query.orderDesc('\$createdAt'),
+        ],
       );
       log(result.documents.length.toString());
       orderItemsModel.value =
-          result.documents.map((e) => OrderItemsModel.fromJson(e.data)).toList();
-      log("orderItemsModel.first.items.name:  " + orderItemsModel.first.items.name);
+          result.documents
+              .map((e) => OrderItemsModel.fromJson(e.data))
+              .toList();
+      log(
+        "orderItemsModel.first.items.name:  " +
+            orderItemsModel.first.items.name,
+      );
     } catch (e) {
       log(e.toString());
       hasError.value = true;
@@ -64,7 +72,10 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> changeStatus(OrderItemsModel orderItemsModel, DeliveryStatus status) async {
+  Future<void> changeStatus(
+    OrderItemsModel orderItemsModel,
+    DeliveryStatus status,
+  ) async {
     print("Changing status to $status");
     try {
       isLoading.value = true;
