@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restro_admin/app/modules/home/controllers/payment_controller.dart';
-
 import 'refresh_button.dart';
 
 class PaymentsView extends StatelessWidget {
   final PaymentController controller = Get.put(PaymentController());
 
   PaymentsView({super.key});
+
+  // Helper method to get an icon based on payment status
+  IconData getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return Icons.check_circle;
+      case 'pending':
+        return Icons.hourglass_empty;
+      case 'failed':
+        return Icons.error;
+      default:
+        return Icons.help;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +45,81 @@ class PaymentsView extends StatelessWidget {
           itemBuilder: (context, index) {
             final payment = controller.payments[index];
             return Card(
-              child: ListTile(
-                title: Text('Amount: \₹${payment.amount.toStringAsFixed(2)}'),
-                subtitle: Column(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Transaction ID: ${payment.transactionId}'),
-                    Text('Status: ${payment.status}'),
-                    Text('User: ${payment.userName}'), // Display username
-                    Text('Restaurant: ${payment.restaurantName}'), // Display restaurant name
+                    // Prominent amount display
+                    Text(
+                      'Amount: \₹${payment.amount.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const Divider(),
+                    // Status with dynamic icon
+                    Row(
+                      children: [
+                        Icon(getStatusIcon(payment.status),
+                            color: const Color.fromARGB(255, 103, 69, 117)),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Status: ${payment.status}',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Transaction ID with icon
+                    Row(
+                      children: [
+                        const Icon(Icons.receipt,
+                            color: Color.fromARGB(255, 93, 87, 87)),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Transaction ID: ${payment.transactionId}',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // User with icon
+                    Row(
+                      children: [
+                        const Icon(Icons.person,
+                            color: Color.fromARGB(255, 79, 98, 127)),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'User: ${payment.userName}',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Restaurant with icon
+                    Row(
+                      children: [
+                        const Icon(Icons.restaurant,
+                            color: Color.fromARGB(255, 81, 47, 47)),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Restaurant: ${payment.restaurantName}',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
