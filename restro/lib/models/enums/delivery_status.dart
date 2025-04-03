@@ -40,6 +40,18 @@ class DeliveryAction {
 extension DeliveryStatusExtension on DeliveryStatus {
   String get value => toString().split('.').last;
 
+  static List<DeliveryStatus> get inProgressStates {
+    return [
+      DeliveryStatus.newOrderAssigned,
+      DeliveryStatus.acceptedOrder,
+      DeliveryStatus.headingToRestaurant,
+      DeliveryStatus.arrivedAtRestaurant,
+      DeliveryStatus.orderPickedUp,
+      DeliveryStatus.headingToCustomer,
+      DeliveryStatus.arrivedAtCustomer,
+    ];
+  }
+
   String get statusText {
     switch (this) {
       case DeliveryStatus.offline:

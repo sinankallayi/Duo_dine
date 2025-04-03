@@ -48,6 +48,14 @@ class Orders extends GetView<OrdersController> {
                 style:
                     Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
+              if (controller.item!.address != null)
+                Text(
+                  "Address: ${controller.item!.address}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w600),
+                ),
               const SizedBox(height: defaultPadding),
               // List of Order Items
               ...List.generate(
@@ -82,11 +90,11 @@ class Orders extends GetView<OrdersController> {
                               "${controller.items[index].status.statusText}",
                               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                             ),
-                            if(controller.items[index].status == OrderStatus.orderCancelled)
-                            Text(
-                              "Your order has been canceled. The refund will be processed to the same account within 7 working days.",
-                              style: TextStyle(fontSize: 14, color: Colors.red[400]),
-                            ),
+                            if (controller.items[index].status == OrderStatus.orderCancelled)
+                              Text(
+                                "Your order has been canceled. The refund will be processed to the same account within 7 working days.",
+                                style: TextStyle(fontSize: 14, color: Colors.red[400]),
+                              ),
                             const SizedBox(height: 8),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

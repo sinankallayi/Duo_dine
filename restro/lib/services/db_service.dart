@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:appwrite/appwrite.dart';
+import 'package:foodly_ui/models/enums/order_status.dart';
 import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
@@ -66,10 +67,8 @@ class DbService {
   }
 
   Future<List<String>> getFeaturedItemIds() async {
-    final result = await db.listDocuments(
-      databaseId: databaseId,
-      collectionId: favoritesCollection
-    );
+    final result =
+        await db.listDocuments(databaseId: databaseId, collectionId: favoritesCollection);
 
     return result.documents.map((doc) => doc.data['itemId'] as String).toList();
   }
@@ -90,6 +89,26 @@ class DbService {
         collectionId: favoritesCollection,
         documentId: documentId,
         data: {'userId': userId, 'itemId': itemId},
+      );
+    }
+  }
+
+  Future<void> clearDeliveryPersonFromOrders(String deliveryPersonId) async {
+    final result = await db.listDocuments(
+      databaseId: databaseId,
+      collectionId: orderItemsCollection,
+      queries: [Query.equal('deliveryPerson', deliveryPersonId)],
+    );
+    log("clearDeliveryPersonFromOrders: ${result.documents.length}");
+    for (var doc in result.documents) {
+      await db.updateDocument(
+        databaseId: databaseId,
+        collectionId: orderItemsCollection,
+        documentId: doc.$id,
+        data: {
+          "deliveryPerson": null,
+          "status": OrderStatus.orderCompleted.value,
+        },
       );
     }
   }

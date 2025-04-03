@@ -14,6 +14,7 @@ class OrderItemsModel {
   int qty;
   // OrderModel orders;
   OrderStatus status;
+  String? address;
   DeliveryPersonModel? deliveryPerson;
   // Restaurant restaurant;
 
@@ -23,6 +24,7 @@ class OrderItemsModel {
     required this.qty,
     // required this.orders,
     required this.status,
+    required this.address,
     required this.deliveryPerson,
     // required this.restaurant,
   });
@@ -33,11 +35,13 @@ class OrderItemsModel {
       $id: json['\$id'],
       items: MenuItemModel.fromJson(json['items']),
       qty: json['qty'],
+      address: json['address'],
       // orders: OrderModel.fromJson(json['orders']),
       status: OrderStatusExtension.fromString(json['status']),
-      deliveryPerson: json['deliveryPerson'] != null
-          ? DeliveryPersonModel.fromJson(json['deliveryPerson'])
-          : null,
+      deliveryPerson:
+          json['deliveryPerson'] != null
+              ? DeliveryPersonModel.fromJson(json['deliveryPerson'])
+              : null,
       // restaurant: Restaurant.fromJson(json['restaurant']),
     );
   }
@@ -55,7 +59,13 @@ class OrderItemsModel {
   }
 
   bool isRejectedOrNoAction() {
-    return isCooking() && deliveryPerson != null && [DeliveryStatus.newOrderAssigned, DeliveryStatus.rejectedOrder, DeliveryStatus.acceptedOrder].contains(deliveryPerson?.deliveryStatus);
+    return isCooking() &&
+        deliveryPerson != null &&
+        [
+          DeliveryStatus.newOrderAssigned,
+          DeliveryStatus.rejectedOrder,
+          DeliveryStatus.acceptedOrder,
+        ].contains(deliveryPerson?.deliveryStatus);
   }
 
   bool isWaitingForDriver() {
@@ -63,23 +73,46 @@ class OrderItemsModel {
         deliveryPerson?.deliveryStatus != DeliveryStatus.arrivedAtRestaurant;
   }
 
-  DeliveryAction get assignDriver => DeliveryAction(
-        label: "Assign Driver",
-        onTap: (OrderItemsModel orderItem) => Get.snackbar(
-            orderItem.items.name, "Assigned to Delivery Person",
-            colorText: Colors.blue),
-        color: Colors.blue,
-        icon: Icons.delivery_dining,
-        nextStatus: DeliveryStatus.newOrderAssigned,
-      );
+  bool isDeliveryClosed() {
+    return [
+          DeliveryStatus.online,
+          DeliveryStatus.offline,
+          DeliveryStatus.delivered,
+          DeliveryStatus.orderCanceled,
+          DeliveryStatus.customerUnreachable,
+          DeliveryStatus.deliveryFailed,
+          DeliveryStatus.returnedToRestaurant,
+          DeliveryStatus.arrivedAtRestaurant,
+        ].contains(deliveryPerson?.deliveryStatus) ||
+        [
+          OrderStatus.orderCompleted,
+          OrderStatus.orderCancelled,
+          OrderStatus.orderFailed,
+          OrderStatus.refunded,
+          OrderStatus.returned,
+        ].contains(status);
+  }
 
-      DeliveryAction get changeDriver => DeliveryAction(
-        label: "Change Driver",
-        onTap: (OrderItemsModel orderItem) => Get.snackbar(
-            orderItem.items.name, "Changed Delivery Person",
-            colorText: Colors.blue),
-        color: Colors.orange,
-        icon: Icons.delivery_dining,
-        nextStatus: DeliveryStatus.newOrderAssigned,
-      );
+  DeliveryAction get assignDriver => DeliveryAction(
+    label: "Assign Driver",
+    onTap:
+        (OrderItemsModel orderItem) => Get.snackbar(
+          orderItem.items.name,
+          "Assigned to Delivery Person",
+          colorText: Colors.blue,
+        ),
+    color: Colors.blue,
+    icon: Icons.delivery_dining,
+    nextStatus: DeliveryStatus.newOrderAssigned,
+  );
+
+  DeliveryAction get changeDriver => DeliveryAction(
+    label: "Change Driver",
+    onTap:
+        (OrderItemsModel orderItem) =>
+            Get.snackbar(orderItem.items.name, "Changed Delivery Person", colorText: Colors.blue),
+    color: Colors.orange,
+    icon: Icons.delivery_dining,
+    nextStatus: DeliveryStatus.newOrderAssigned,
+  );
 }

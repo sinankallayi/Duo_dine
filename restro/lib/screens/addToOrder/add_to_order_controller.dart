@@ -81,7 +81,7 @@ class AddToOrderController extends GetxController {
       isLoading.value = false;
       Fluttertoast.showToast(msg: "Order added to cart");
       Get.put(OrderDetailsController()).getCartItems();
-      Get.to(() => const OrderDetailsScreen());
+      Get.to(() => OrderDetailsScreen());
     } on AppwriteException catch (e) {
       print(e.message);
       _handleError(e.message!);

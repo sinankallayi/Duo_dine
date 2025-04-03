@@ -45,7 +45,7 @@ class PaymentController extends GetxController {
     bool isSuccess = true; //DateTime.now().second % 2 == 0;
 
     if (isSuccess) {
-      await _createOrder(args['items'], args['price'], 'success');
+      await _createOrder(args['items'], args['price'],args['address'],  'success');
     } else {
       await _handleFailedPayment(args['items'], args['price']);
     }
@@ -58,7 +58,7 @@ class PaymentController extends GetxController {
     );
   }
 
-  Future<void> _createOrder(List<CartModel> items, double price, String status) async {
+  Future<void> _createOrder(List<CartModel> items, double price, String? address, String status) async {
     await getUserInfo();
     String orderId = ID.unique();
 
@@ -71,7 +71,7 @@ class PaymentController extends GetxController {
 
     await Future.wait([
       _deleteCartItems(items),
-      _createOrderItems(items, orderId),
+      _createOrderItems(items, orderId, address),
       _createPayments(items, price, status),
     ]);
 
@@ -158,7 +158,7 @@ class PaymentController extends GetxController {
     }
   }
 
-  Future<void> _createOrderItems(List<CartModel> items, String orderId) async {
+  Future<void> _createOrderItems(List<CartModel> items, String orderId, String? address) async {
     for (var item in items) {
       var itemId = ID.unique();
       await _createDocument(orderItemsCollection, itemId, {
@@ -166,6 +166,7 @@ class PaymentController extends GetxController {
         'items': item.item.$id,
         'qty': item.quantity,
         'restaurant': item.item.restaurant.id,
+        'address': address??"",
       });
 
       await _createDocument(

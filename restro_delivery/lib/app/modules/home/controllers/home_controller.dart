@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:get/get.dart';
+import 'package:restro_delivery/app/data/enums/order_status.dart';
 
 import '/app/data/constants.dart';
 import '../../../data/enums/delivery_status.dart';
@@ -49,20 +50,12 @@ class HomeController extends GetxController {
       var result = await databases.listDocuments(
         databaseId: dbId,
         collectionId: orderItemsCollection,
-        queries: [
-          Query.equal('deliveryPerson', userId),
-          Query.orderDesc('\$createdAt'),
-        ],
+        queries: [Query.equal('deliveryPerson', userId), Query.orderDesc('\$createdAt')],
       );
       log(result.documents.length.toString());
       orderItemsModel.value =
-          result.documents
-              .map((e) => OrderItemsModel.fromJson(e.data))
-              .toList();
-      log(
-        "orderItemsModel.first.items.name:  " +
-            orderItemsModel.first.items.name,
-      );
+          result.documents.map((e) => OrderItemsModel.fromJson(e.data)).toList();
+      log("orderItemsModel.first.items.name:  " + orderItemsModel.first.items.name);
     } catch (e) {
       log(e.toString());
       hasError.value = true;
@@ -72,10 +65,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> changeStatus(
-    OrderItemsModel orderItemsModel,
-    DeliveryStatus status,
-  ) async {
+  Future<void> changeStatus(OrderItemsModel orderItemsModel, DeliveryStatus status) async {
     print("Changing status to $status");
     try {
       isLoading.value = true;
@@ -85,6 +75,15 @@ class HomeController extends GetxController {
         documentId: orderItemsModel.deliveryPerson!.$id,
         data: {'deliveryStatus': status.value},
       );
+      if (orderItemsModel.isDeliveryClosed()) {
+        await databases.updateDocument(
+          databaseId: dbId,
+          collectionId: orderItemsCollection,
+          documentId: orderItemsModel.$id,
+          data: {'deliveryPerson': null, 'status': OrderStatus.orderCompleted.value},
+        );
+      }
+
       Get.snackbar('Success', 'Ordrer status changed to ${status.statusText}');
       await getOrders();
     } catch (e) {

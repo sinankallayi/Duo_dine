@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/constants.dart';
-import 'package:foodly_ui/models/enums/order_status.dart';
 import 'package:foodly_ui/models/order_items_model.dart';
 import 'package:foodly_ui/screens/Restaurent/home/controllers/orders_controller.dart';
 import 'package:get/get.dart';
-
-import '../../../../models/enums/delivery_status.dart';
 
 class DeliveryPersonsList extends GetView<OrdersController> {
   final OrderItemsModel orderItemsModel;
@@ -42,6 +38,11 @@ class DeliveryPersonsList extends GetView<OrdersController> {
           if (controller.deliveyIsLoading.value) {
             return const SizedBox.expand();
           } else {
+            if (controller.filteredDeliveryPersons.isEmpty) {
+              return const Center(
+                child: Text("No available drivers at the moment"),
+              );
+            }
             return ListView.separated(
               shrinkWrap: true,
               itemCount: controller.filteredDeliveryPersons.length,

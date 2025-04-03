@@ -69,10 +69,7 @@ class _SignInFormState extends State<SignInForm> {
             ),
             child: Text(
               "Forget Password?",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w500),
             ),
           ),
           const SizedBox(height: defaultPadding),
@@ -83,9 +80,10 @@ class _SignInFormState extends State<SignInForm> {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
 
-                await login(email: _email!, password: _password!);
-                Get.offAll(() => const ChooseTypeScreen());
-
+                var isLogedIn = await login(email: _email!, password: _password!);
+                if (isLogedIn) {
+                  Get.offAll(() => const ChooseTypeScreen());
+                }
                 // just for demo
                 // Navigator.pushAndRemoveUntil(
                 //   context,
