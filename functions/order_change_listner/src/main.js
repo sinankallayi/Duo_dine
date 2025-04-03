@@ -8,28 +8,48 @@ export default async ({ req, res, log, error }) => {
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
     .setKey(req.headers['x-appwrite-key'] ?? '');
-  const users = new Users(client);
-
-  try {
-    const response = await users.list();
-    // Log messages and errors to the Appwrite Console
-    // These logs won't be seen by your end users
-    log(`Total users: ${response.total}`);
-  } catch(err) {
-    error("Could not list users: " + err.message);
-  }
-
-  // The req object contains the request data
-  if (req.path === "/ping") {
-    // Use res object to respond with text(), json(), or binary()
-    // Don't forget to return a response!
-    return res.text("Pong");
-  }
-
-  return res.json({
-    motto: "Build like a team of hundreds_",
-    learn: "https://appwrite.io/docs",
-    connect: "https://appwrite.io/discord",
-    getInspired: "https://builtwith.appwrite.io",
-  });
+  
+    const databases = new Databases(client);
+    const databaseId = process.env.APPWRITE_DATABASE_ID; // Set this in your environment variables
+  
+    try {
+      // Parse the event payload
+      const payload = req.body ? JSON.parse(req.body) : null;
+      if (!payload || !payload.$id) {
+        return res.json({ success: false, message: "Invalid event payload" });
+      }
+  
+      log(`Event payload: ${JSON.stringify(payload)}`);
+  
+      // Check if the event is relevant (order_item updated)
+      if (payload.status === "foodDelivered"
+  || payload.status === "orderCompleted"
+  || payload.status === "orderCancelled"
+  || payload.status === "orderFailed"
+  || payload.status === "refunded"
+  || payload.status === "returned"
+      ) {
+        const deliveryPersonId = payload.deliveryPerson_id; // Ensure this field exists in `order_item`
+  log(`Delivery person ID: ${deliveryPersonId}`);
+        if (!deliveryPersonId) {
+          return res.json({ success: false, message: "No delivery person linked" });
+        }
+  
+        // Determine new status for delivery_person
+        const newStatus = "online";
+  
+        // Update the delivery_person status
+        await databases.updateDocument(databaseId, "delivery_person", deliveryPersonId, {
+          deliveryStatus: newStatus,
+        });
+  
+        log(`Updated delivery_person ${deliveryPersonId} status to ${newStatus}`);
+      }
+    } catch (err) {
+      error("Error updating delivery person status: " + err.message);
+      return res.json({ success: false, error: err.message });
+    }
+  
+    return res.json({ success: true, message: "Function executed successfully" });
+  
 };
