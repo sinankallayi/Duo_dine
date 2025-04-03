@@ -118,7 +118,7 @@ class PaymentController extends GetxController {
     //Grouping Restaurants
     for (var item in items) {
       String restaurantId = item.item.restaurant.id;
-      double amount = item.item.price;
+      double amount = item.quantity.toDouble() * item.item.price;
 
       if (restaurantPayments.containsKey(restaurantId)) {
         restaurantPayments[restaurantId] = (restaurantPayments[restaurantId] ?? 0) + amount;
