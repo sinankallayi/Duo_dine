@@ -143,7 +143,6 @@ class OrderItemCard extends StatelessWidget {
                     ActionButton(
                       onPressed: () async {
                         await assignDeliveryPerson(orderItem);
-                        orderItem.assignDriver.onTap(orderItem);
                       },
                       iconColor: orderItem.assignDriver.color,
                       icon: orderItem.assignDriver.icon,
