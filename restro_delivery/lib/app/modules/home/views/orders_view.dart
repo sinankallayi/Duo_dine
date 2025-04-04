@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restro_delivery/app/data/enums/order_status.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/enums/delivery_status.dart';
 import '../controllers/home_controller.dart';
@@ -26,7 +27,7 @@ class OrdersView extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('No orders available'),
-                  
+
                       TextButton.icon(
                         onPressed: () {
                           controller.getOrders();
@@ -61,8 +62,23 @@ class OrdersView extends GetView<HomeController> {
                               orderItemsModel.items.name,
                               style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            subtitle: Text(
-                              'Delivery Status: ${orderItemsModel.deliveryPerson?.deliveryStatus.statusText}',
+                            subtitle: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Delivery Status: ${orderItemsModel.deliveryPerson?.deliveryStatus.statusText}',
+                                ),
+                                if (orderItemsModel.address != null &&
+                                    orderItemsModel.address?.isNotEmpty == true)
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Address: ${orderItemsModel.address}"),
+                                      MapButton(address: orderItemsModel.address!),
+                                    ],
+                                  ),
+                              ],
                             ),
                             trailing: Text(orderItemsModel.status.statusText),
                             onTap: () {
@@ -78,12 +94,16 @@ class OrdersView extends GetView<HomeController> {
                               runSpacing: 10,
                               children:
                                   deliveryStatus.actions.map((action) {
-                                    if (orderItemsModel.isPreparingFood() && action.nextStatus == DeliveryStatus.orderPickedUp) {
+                                    if (orderItemsModel.isPreparingFood() &&
+                                        action.nextStatus == DeliveryStatus.orderPickedUp) {
                                       return const SizedBox.shrink();
                                     }
                                     return ElevatedButton.icon(
-                                      onPressed: () async{
-                                        await controller.changeStatus(orderItemsModel, action.nextStatus);
+                                      onPressed: () async {
+                                        await controller.changeStatus(
+                                          orderItemsModel,
+                                          action.nextStatus,
+                                        );
                                         action.onTap(orderItemsModel);
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -102,5 +122,39 @@ class OrdersView extends GetView<HomeController> {
                 ),
       );
     });
+  }
+}
+
+class MapButton extends StatelessWidget {
+  final String address;
+
+  const MapButton({super.key, required this.address});
+
+  Future<void> openMapWithAddress(String address) async {
+    final query = Uri.encodeComponent(address);
+    final googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$query';
+
+    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+      await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: () => openMapWithAddress(address),
+      icon: const Icon(Icons.map, color: Colors.blue),
+      label: const Text(
+        'Open in Maps',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500 , color: Colors.blue),
+      ),
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 4,
+      ),
+    );
   }
 }

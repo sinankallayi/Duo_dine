@@ -116,7 +116,7 @@ extension DeliveryStatusExtension on DeliveryStatus {
                   colorText: Colors.blue),
               color: Colors.blue,
               icon: Icons.access_time,
-              nextStatus: DeliveryStatus.online),
+              nextStatus: DeliveryStatus.newOrderAssigned),
         ];
       case DeliveryStatus.newOrderAssigned:
         return [
