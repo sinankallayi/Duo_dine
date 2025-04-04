@@ -43,6 +43,19 @@ class DeliveryPersonsList extends GetView<OrdersController> {
                 child: Text("No available drivers at the moment"),
               );
             }
+            if (controller.assigningIsLoading.value) {
+              return const Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text("Assigning..."),
+                  ],
+                ),
+              );
+            }
             return ListView.separated(
               shrinkWrap: true,
               itemCount: controller.filteredDeliveryPersons.length,

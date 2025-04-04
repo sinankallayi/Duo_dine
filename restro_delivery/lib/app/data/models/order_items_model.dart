@@ -54,6 +54,12 @@ class OrderItemsModel {
     ].contains(status);
   }
 
+  bool isPreparingFood() {
+    return [
+      OrderStatus.foodPreparing,
+    ].contains(status);
+  }
+
   bool isConfirmedButNotAssigned() {
     return isCooking() && deliveryPerson == null;
   }
@@ -71,26 +77,6 @@ class OrderItemsModel {
   bool isWaitingForDriver() {
     return OrderStatus.foodReadyForPickup == status &&
         deliveryPerson?.deliveryStatus != DeliveryStatus.arrivedAtRestaurant;
-  }
-
-  bool isDeliveryClosed() {
-    return [
-          DeliveryStatus.online,
-          DeliveryStatus.offline,
-          DeliveryStatus.delivered,
-          DeliveryStatus.orderCanceled,
-          DeliveryStatus.customerUnreachable,
-          DeliveryStatus.deliveryFailed,
-          DeliveryStatus.returnedToRestaurant,
-          DeliveryStatus.arrivedAtRestaurant,
-        ].contains(deliveryPerson?.deliveryStatus) ||
-        [
-          OrderStatus.orderCompleted,
-          OrderStatus.orderCancelled,
-          OrderStatus.orderFailed,
-          OrderStatus.refunded,
-          OrderStatus.returned,
-        ].contains(status);
   }
 
   DeliveryAction get assignDriver => DeliveryAction(

@@ -2,14 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:foodly_ui/data.dart';
 import 'package:foodly_ui/functions/auth.dart';
 import 'package:foodly_ui/screens/favorites/favorites_screen.dart';
-import 'package:foodly_ui/screens/findRestaurants/find_restaurants_screen.dart';
 import 'package:foodly_ui/screens/splash/splash_view.dart';
 import 'package:get/get.dart';
-import 'package:restart_app/restart_app.dart';
+
 import '../../../constants.dart';
 
 class Body extends StatelessWidget {

@@ -78,6 +78,9 @@ class OrdersView extends GetView<HomeController> {
                               runSpacing: 10,
                               children:
                                   deliveryStatus.actions.map((action) {
+                                    if (orderItemsModel.isPreparingFood() && action.nextStatus == DeliveryStatus.orderPickedUp) {
+                                      return const SizedBox.shrink();
+                                    }
                                     return ElevatedButton.icon(
                                       onPressed: () async{
                                         await controller.changeStatus(orderItemsModel, action.nextStatus);

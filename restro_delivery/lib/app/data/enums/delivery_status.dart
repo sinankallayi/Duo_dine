@@ -77,6 +77,23 @@ extension DeliveryStatusExtension on DeliveryStatus {
     }
   }
 
+  
+  static bool isDeliveryCompleted(DeliveryStatus status) {
+    return [
+          DeliveryStatus.delivered,
+        ].contains(status);
+  }
+
+  static bool isDeliveryFailed(DeliveryStatus status) {
+    return [
+          DeliveryStatus.orderCanceled,
+          DeliveryStatus.customerUnreachable,
+          DeliveryStatus.deliveryFailed,
+          DeliveryStatus.returnedToRestaurant,
+        ].contains(status);
+  }
+
+
   List<DeliveryAction> get actions {
     switch (this) {
       case DeliveryStatus.offline:

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:appwrite/appwrite.dart';
-import 'package:foodly_ui/models/enums/order_status.dart';
+import 'package:foodly_ui/models/enums/delivery_status.dart';
 import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
@@ -107,9 +107,27 @@ class DbService {
         documentId: doc.$id,
         data: {
           "deliveryPerson": null,
-          "status": OrderStatus.orderCompleted.value,
         },
       );
     }
+    await db.updateDocument(
+      databaseId: databaseId,
+      collectionId: deliveryPersonsCollection,
+      documentId: deliveryPersonId,
+      data: {
+        "deliveryStatus": DeliveryStatus.online.value,
+      },
+    );
+  }
+
+  Future<void> removePreviousAssignment(String deliveryPersonId) async {
+    await db.updateDocument(
+      databaseId: databaseId,
+      collectionId: deliveryPersonsCollection,
+      documentId: deliveryPersonId,
+      data: {
+        "deliveryStatus": DeliveryStatus.online.value,
+      },
+    );
   }
 }

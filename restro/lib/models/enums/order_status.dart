@@ -107,30 +107,30 @@ extension OrderStatusExtension on OrderStatus {
         ];
       case OrderStatus.foodReadyForPickup:
         return [
-          OrderAction(
-              label: "Out for Delivery",
-              onTap: (OrderItemsModel orderItem) =>
-                  Get.snackbar(orderItem.items.name, "Out for Delivery", colorText: Colors.orange),
-              color: Colors.orange,
-              icon: Icons.delivery_dining,
-              nextStatus: OrderStatus.outForDelivery),
+          // OrderAction(
+          //     label: "Out for Delivery",
+          //     onTap: (OrderItemsModel orderItem) =>
+          //         Get.snackbar(orderItem.items.name, "Out for Delivery", colorText: Colors.orange),
+          //     color: Colors.orange,
+          //     icon: Icons.delivery_dining,
+          //     nextStatus: OrderStatus.outForDelivery),
         ];
       case OrderStatus.outForDelivery:
         return [
-          OrderAction(
-              label: "Mark as Delivered",
-              onTap: (OrderItemsModel orderItem) =>
-                  Get.snackbar(orderItem.items.name, "Food Delivered", colorText: Colors.green),
-              color: Colors.green,
-              icon: Icons.home,
-              nextStatus: OrderStatus.foodDelivered),
-          OrderAction(
-              label: "Mark as Failed",
-              onTap: (OrderItemsModel orderItem) =>
-                  Get.snackbar(orderItem.items.name, "Delivery Failed", colorText: Colors.red),
-              color: Colors.red,
-              icon: Icons.error,
-              nextStatus: OrderStatus.orderFailed),
+          // OrderAction(
+          //     label: "Mark as Delivered",
+          //     onTap: (OrderItemsModel orderItem) =>
+          //         Get.snackbar(orderItem.items.name, "Food Delivered", colorText: Colors.green),
+          //     color: Colors.green,
+          //     icon: Icons.home,
+          //     nextStatus: OrderStatus.foodDelivered),
+          // OrderAction(
+          //     label: "Mark as Failed",
+          //     onTap: (OrderItemsModel orderItem) =>
+          //         Get.snackbar(orderItem.items.name, "Delivery Failed", colorText: Colors.red),
+          //     color: Colors.red,
+          //     icon: Icons.error,
+          //     nextStatus: OrderStatus.orderFailed),
         ];
       case OrderStatus.foodDelivered:
         return [

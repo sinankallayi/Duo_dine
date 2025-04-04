@@ -26,7 +26,7 @@ class HomeController extends GetxController {
 
   void _listenToFavorites() {
     _dbService.realtime
-        .subscribe(['databases.$dbId.collections.order_items.documents'])
+        .subscribe(['databases.$dbId.collections.$orderItemsCollection.documents'])
         .stream
         .listen((event) {
           getOrders();
@@ -75,12 +75,28 @@ class HomeController extends GetxController {
         documentId: orderItemsModel.deliveryPerson!.$id,
         data: {'deliveryStatus': status.value},
       );
-      if (orderItemsModel.isDeliveryClosed()) {
+
+      if (status == DeliveryStatus.orderPickedUp) {
         await databases.updateDocument(
           databaseId: dbId,
           collectionId: orderItemsCollection,
           documentId: orderItemsModel.$id,
-          data: {'deliveryPerson': null, 'status': OrderStatus.orderCompleted.value},
+          data: {'status': OrderStatus.outForDelivery.value},
+        );
+      }
+
+      bool isCompleted = DeliveryStatusExtension.isDeliveryCompleted(status);
+      bool isFailed = DeliveryStatusExtension.isDeliveryFailed(status);
+      if (isCompleted || isFailed) {
+        await databases.updateDocument(
+          databaseId: dbId,
+          collectionId: orderItemsCollection,
+          documentId: orderItemsModel.$id,
+          data: {
+            'deliveryPerson': null,
+            'status':
+                isCompleted ? OrderStatus.orderCompleted.value : OrderStatus.orderFailed.value,
+          },
         );
       }
 

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/constants.dart';
@@ -8,7 +6,6 @@ import 'package:foodly_ui/models/delivery_person_model.dart';
 import 'package:foodly_ui/models/order_items_model.dart';
 import 'package:foodly_ui/screens/Restaurent/home/widgets/delivery_persons_list.dart';
 import 'package:get/get.dart';
-import 'dart:convert';
 
 import '../../../../models/enums/delivery_status.dart';
 import '../../../../models/enums/order_status.dart';
@@ -18,6 +15,8 @@ import '../../../../services/notification_service.dart';
 class OrdersController extends GetxController {
   RxBool isLoading = true.obs;
   RxBool deliveyIsLoading = true.obs;
+  RxBool assigningIsLoading = false.obs;
+
   RxList<OrderItemsModel> orderItems = <OrderItemsModel>[].obs;
   RxList<DeliveryPersonModel> deliveryPersons = <DeliveryPersonModel>[].obs;
   RxList<DeliveryPersonModel> filteredDeliveryPersons = <DeliveryPersonModel>[].obs;
@@ -32,7 +31,14 @@ class OrdersController extends GetxController {
 
   void _listenToFavorites() {
     _dbService.realtime
-        .subscribe(['databases.$dbId.collections.order_items.documents'])
+        .subscribe(['databases.$dbId.collections.$orderItemsCollection.documents'])
+        .stream
+        .listen((event) {
+          getOrders();
+        });
+
+    _dbService.realtime
+        .subscribe(['databases.$dbId.collections.$deliveryPersonsCollection.documents'])
         .stream
         .listen((event) {
           getOrders();
@@ -54,6 +60,7 @@ class OrdersController extends GetxController {
         Query.notEqual('status', OrderStatus.refunded.value),
         Query.notEqual('status', OrderStatus.orderFailed.value),
         Query.notEqual('status', OrderStatus.orderCompleted.value),
+        Query.notEqual('status', OrderStatus.orderCancelled.value),
         Query.orderDesc('\$createdAt'),
       ],
     );
@@ -115,38 +122,12 @@ class OrdersController extends GetxController {
     getOrders();
   }
 
-  // Future<void> updateOrderStatusOld(id, String s, int index) async {
-  //   print("updating order status to $s");
-  //   isLoading.value = true;
-  //   try {
-  //     await db.updateDocument(
-  //       databaseId: dbId,
-  //       collectionId: orderItemsCollection,
-  //       documentId: id,
-  //       data: {
-  //         "status": s,
-  //       },
-  //     );
-
-  //     await functions.createExecution(
-  //       functionId: funId,
-  //       body: jsonEncode({
-  //         'title': 'Order Status Updated',
-  //         'body': 'The status of your order has been updated to $s',
-  //         'users': getId(orderItems[index].orders.user),
-  //       }),
-  //       path: sendMsgPath,
-  //     );
-  //   } on AppwriteException catch (e) {
-  //     print(e.message);
-  //   }
-  //   isLoading.value = false;
-  //   getOrders();
-  // }
-
   Future<void> assignDeliveryPerson(
       OrderItemsModel orderItemsModel, DeliveryPersonModel deliveryPerson) async {
+    assigningIsLoading.value = true;
     await _dbService.clearDeliveryPersonFromOrders(deliveryPerson.$id);
+    var deliveryPersonId = orderItemsModel.deliveryPerson?.$id;
+    if (deliveryPersonId != null) await _dbService.removePreviousAssignment(deliveryPersonId);
     await db.updateDocument(
       databaseId: dbId,
       collectionId: orderItemsCollection,
@@ -163,8 +144,8 @@ class OrdersController extends GetxController {
       documentId: deliveryPerson.$id,
       data: {'deliveryStatus': DeliveryStatus.newOrderAssigned.value},
     );
-
     getOrders();
+    assigningIsLoading.value = false;
     Get.back();
   }
 
