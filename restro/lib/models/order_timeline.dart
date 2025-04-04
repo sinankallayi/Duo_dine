@@ -12,14 +12,15 @@ class OrderTimeline {
     required this.itemId,
     required this.status,
     required this.description,
-  }){
+  }) {
     isCompleted = createdDate != null;
   }
 
   //from json
   factory OrderTimeline.fromJson(Map<String, dynamic> json) {
     return OrderTimeline(
-      createdDate: json['\$createdAt'] !=null ? DateTime.parse(json['\$createdAt']).toLocal() : null,
+      createdDate:
+          json['\$createdAt'] != null ? DateTime.parse(json['\$createdAt']).toLocal() : null,
       status: OrderStatusExtension.fromString(json['status']),
       itemId: json['itemId'],
       description: json['description'] ?? "",

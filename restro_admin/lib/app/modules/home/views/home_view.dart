@@ -12,7 +12,7 @@ class HomeView extends StatelessWidget {
 
   final List<Widget> pages = [
     RestaurantsView(), // Shows the restaurant list
-    ComplaintsView(),
+    // ComplaintsView(),
     PaymentsView(),
   ];
 
@@ -34,10 +34,10 @@ class HomeView extends StatelessWidget {
               icon: Icon(Icons.restaurant),
               label: 'Restaurants',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.report),
-              label: 'Complaints',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.report),
+            //   label: 'Complaints',
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.payment),
               label: 'Payments',

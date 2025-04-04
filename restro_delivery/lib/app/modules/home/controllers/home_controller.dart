@@ -98,6 +98,16 @@ class HomeController extends GetxController {
                 isCompleted ? OrderStatus.orderCompleted.value : OrderStatus.orderFailed.value,
           },
         );
+        await databases.createDocument(
+        databaseId: dbId,
+        collectionId: orderTimelineCollection,
+        documentId: ID.unique(),
+        data: {
+          "itemId": orderItemsModel.$id,
+          "status": isCompleted ? OrderStatus.orderCompleted.value : OrderStatus.orderFailed.value,
+          "description": isCompleted ? OrderStatus.orderCompleted.statusText : OrderStatus.orderFailed.statusText,
+        },
+      );
       }
 
       Get.snackbar('Success', 'Ordrer status changed to ${status.statusText}');

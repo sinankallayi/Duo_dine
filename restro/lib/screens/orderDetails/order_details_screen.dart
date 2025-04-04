@@ -95,8 +95,8 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                       ),
                     ),
                     const SizedBox(height: defaultPadding * 2),
-     _buildLocationField(),
-                    
+                    _buildLocationField(),
+
                     const SizedBox(height: defaultPadding * 2),
 
                     // **Checkout Button**
@@ -104,14 +104,15 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                       text: "Checkout (\₹${controller.cartPrice.value})",
                       press: () {
                         if (controller.location.value.isEmpty) {
-                          Get.snackbar('Error', 'Please enter valid address', backgroundColor: Colors.red);
+                          Get.snackbar('Error', 'Please enter valid address',
+                              backgroundColor: Colors.red);
                           return;
                         }
 
                         Get.to(
                           () => const PaymentScreen(),
                           arguments: {
-                            "location": controller.location.value,
+                            "address": controller.location.value,
                             "price": controller.cartPrice.value,
                             "items": controller.cartItems,
                           },
@@ -141,7 +142,8 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                         child: Padding(
                           padding: const EdgeInsets.all(defaultPadding / 2),
                           child: OrderedItemCard(
-                            title: '${controller.orders[index].itemCount} ${controller.orders[index].itemCount == 1 ? 'item' : 'items'}',
+                            title:
+                                '${controller.orders[index].itemCount} ${controller.orders[index].itemCount == 1 ? 'item' : 'items'}',
                             description: DateFormat('d MMM yyyy hh:mm a')
                                 .format(controller.orders[index].createdDate),
                             numOfItem: 0,
@@ -179,5 +181,4 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
       onSaved: (value) => controller.location.value = value!,
     );
   }
-
 }

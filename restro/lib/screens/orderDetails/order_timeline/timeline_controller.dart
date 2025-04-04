@@ -45,10 +45,17 @@ class TimelineController extends GetxController {
           .toList();
       log("completed ${completed.length}");
       log("Pending ${pending.length}");
-      completed.addAll(pending);
+      if (!containsAnyStatus(completed,
+          [OrderStatus.orderCancelled, OrderStatus.orderFailed, OrderStatus.orderCompleted])) {
+        completed.addAll(pending);
+      }
       orderTimeline.assignAll(completed);
     } on AppwriteException catch (e) {
       debugPrint(e.message);
     }
+  }
+
+  bool containsAnyStatus(List<OrderTimeline> timelines, List<OrderStatus> statusesToCheck) {
+    return timelines.any((timeline) => statusesToCheck.contains(timeline.status));
   }
 }
