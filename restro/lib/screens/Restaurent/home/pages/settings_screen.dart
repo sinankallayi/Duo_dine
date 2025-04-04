@@ -24,30 +24,29 @@ class SettingsScreen extends GetView {
               Get.offAll(const SplashView());
             },
           ),
-          const ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text('Notifications'),
-          ),
+          // const ListTile(
+          //   leading: Icon(Icons.notifications),
+          //   title: Text('Notifications'),
+          // ),
           ListTile(
-            // Removed 'const'
             leading: const Icon(Icons.payment),
             title: const Text('Payment'),
             onTap: () {
               Get.to(() => PaymentsView()); // Using GetX navigation
             },
           ),
-          const ListTile(
-            leading: Icon(Icons.lock),
-            title: Text('Privacy'),
-          ),
-          const ListTile(
-            leading: Icon(Icons.help),
-            title: Text('Help'),
-          ),
-          const ListTile(
-            leading: Icon(Icons.info),
-            title: Text('About'),
-          ),
+          // const ListTile(
+          //   leading: Icon(Icons.lock),
+          //   title: Text('Privacy'),
+          // ),
+          // const ListTile(
+          //   leading: Icon(Icons.help),
+          //   title: Text('Help'),
+          // ),
+          // const ListTile(
+          //   leading: Icon(Icons.info),
+          //   title: Text('About'),
+          // ),
           TextButton(
             onPressed: () async {
               await logout();

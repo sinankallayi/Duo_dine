@@ -40,18 +40,18 @@ class Body extends StatelessWidget {
                   Get.to(() => const FavoritesScreen());
                 },
               ),
-              ProfileMenuCard(
-                icon: CupertinoIcons.person,
-                title: "Profile Information",
-                subTitle: "Change your account information",
-                press: () {},
-              ),
-              ProfileMenuCard(
-                icon: CupertinoIcons.lock,
-                title: "Change Password",
-                subTitle: "Change your password",
-                press: () {},
-              ),
+              // ProfileMenuCard(
+              //   icon: CupertinoIcons.person,
+              //   title: "Profile Information",
+              //   subTitle: "Change your account information",
+              //   press: () {},
+              // ),
+              // ProfileMenuCard(
+              //   icon: CupertinoIcons.lock,
+              //   title: "Change Password",
+              //   subTitle: "Change your password",
+              //   press: () {},
+              // ),
               ProfileMenuCard(
                 icon: CupertinoIcons.square_on_square,
                 title: "Switch to restaurant",
@@ -63,15 +63,15 @@ class Body extends StatelessWidget {
                   // Restart.restartApp();
                 },
               ),
-              ProfileMenuCard(
-                icon: CupertinoIcons.location,
-                title: "Locations",
-                subTitle: "Add or remove your delivery locations",
-                press: () {
-                  // FindRestaurantsScreen();
-                  Get.to(() => const FindRestaurantsScreen());
-                },
-              ),
+              // ProfileMenuCard(
+              //   icon: CupertinoIcons.location,
+              //   title: "Locations",
+              //   subTitle: "Add or remove your delivery locations",
+              //   press: () {
+              //     // FindRestaurantsScreen();
+              //     Get.to(() => const FindRestaurantsScreen());
+              //   },
+              // ),
               // logout
               ProfileMenuCard(
                 icon: CupertinoIcons.square_arrow_left,

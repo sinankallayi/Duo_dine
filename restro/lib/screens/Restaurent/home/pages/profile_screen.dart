@@ -12,63 +12,92 @@ class ProfileScreen extends StatelessWidget {
         ? const Center(child: Text("Profile screen"))
         : SingleChildScrollView(
             child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (profile.image != null)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Image.network(
-                      getImageUrl(profile.image!),
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (profile.image != null)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16.0),
+                      child: Image.network(
+                        getImageUrl(profile.image!),
+                        width: double.infinity,
+                        height: 220,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Text(
+                      profile.name,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                   ),
-                const SizedBox(height: 16),
-                Text(
-                  profile.name,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on, color: Colors.red),
-                    const SizedBox(width: 8),
-                    Text(profile.address, style: const TextStyle(fontSize: 16)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.phone, color: Colors.green),
-                    const SizedBox(width: 8),
-                    Text(profile.phone, style: const TextStyle(fontSize: 16)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                if (profile.rating != null)
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.orange),
-                      const SizedBox(width: 8),
-                      Text('${profile.rating}', style: const TextStyle(fontSize: 16)),
-                    ],
+                  const SizedBox(height: 12),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.location_on,
+                                color: Colors.red),
+                            title: Text(profile.address,
+                                style: const TextStyle(fontSize: 16)),
+                          ),
+                          ListTile(
+                            leading:
+                                const Icon(Icons.phone, color: Colors.green),
+                            title: Text(profile.phone,
+                                style: const TextStyle(fontSize: 16)),
+                          ),
+                          if (profile.rating != null)
+                            ListTile(
+                              leading:
+                                  const Icon(Icons.star, color: Colors.orange),
+                              title: Text('${profile.rating}',
+                                  style: const TextStyle(fontSize: 16)),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
-                const SizedBox(height: 16),
-                Text(
-                  'Tags: ${profile.tags}',
-                  style: const TextStyle(
-                      fontSize: 14, fontStyle: FontStyle.italic, color: Colors.grey),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  profile.description,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  Text(
+                    'Tags:',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Text(
+                    profile.tags,
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Description:',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Text(
+                    profile.description,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
             ),
-          ));
+          );
   }
 }
