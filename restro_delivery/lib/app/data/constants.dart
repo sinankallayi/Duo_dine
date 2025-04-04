@@ -15,10 +15,13 @@ Client? client;
 User? user;
 Account account = Account(client!);
 Databases databases = Databases(client!);
+Messaging messaging = Messaging(client!);
+Functions functions = Functions(client!);
 
 const projectId = '67dc5f7e003032d8838b';
 // databse
 const dbId = '67dd045f0027aa53f550';
+const funId = "67cd58e6002f3c0a38f4";
 
 // collections
 const restaurantCollection = '679351de0007535ff696';
@@ -29,3 +32,10 @@ const orderItemsCollection = "67935e14001fe833d665";
 const ordersCollection = "67935cf2002174bad91d";
 const deliveryPersonsCollection = "67c96b630024ab1bf027";
 const orderTimelineCollection = "67ec19260003054f94a4";
+
+// topics
+const notifcationProviderId = "67e2a18f0022e80e9f47";
+const notifcationsTopic = "67cd427b0039b72f15f7";
+
+//paths
+const sendMsgPath = "/send-push";

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../enums/delivery_status.dart';
-import '../enums/order_status.dart';
 import '/app/data/models/delivery_person_model.dart';
 import '/app/data/models/menu_items_model.dart';
-import '/app/data/models/order_model.dart';
-import '/app/data/models/restaurant_model.dart';
+import '../enums/delivery_status.dart';
+import '../enums/order_status.dart';
+import 'order_model.dart';
 
 class OrderItemsModel {
   String $id;
   MenuItemModel items;
   int qty;
-  // OrderModel orders;
+  OrderModel orders;
   OrderStatus status;
   String? address;
   DeliveryPersonModel? deliveryPerson;
@@ -22,7 +21,7 @@ class OrderItemsModel {
     required this.$id,
     required this.items,
     required this.qty,
-    // required this.orders,
+    required this.orders,
     required this.status,
     required this.address,
     required this.deliveryPerson,
@@ -36,7 +35,7 @@ class OrderItemsModel {
       items: MenuItemModel.fromJson(json['items']),
       qty: json['qty'],
       address: json['address'],
-      // orders: OrderModel.fromJson(json['orders']),
+      orders: OrderModel.fromJson(json['orders']),
       status: OrderStatusExtension.fromString(json['status']),
       deliveryPerson:
           json['deliveryPerson'] != null
@@ -55,9 +54,7 @@ class OrderItemsModel {
   }
 
   bool isPreparingFood() {
-    return [
-      OrderStatus.foodPreparing,
-    ].contains(status);
+    return [OrderStatus.foodPreparing].contains(status);
   }
 
   bool isConfirmedButNotAssigned() {

@@ -1,7 +1,9 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:get/get.dart';
+
 import '/app/data/constants.dart';
 import '/app/routes/app_pages.dart';
+import '../../../services/notification_service.dart';
 
 enum AuthState { loading, login, register, home }
 
@@ -10,6 +12,7 @@ class AuthController extends GetxController {
   void checkUser() async {
     try {
       user = await account.get();
+      NotificationService();
     } on Exception catch (e) {
       print(e);
     }

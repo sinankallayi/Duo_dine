@@ -7,11 +7,16 @@ import '/app/data/constants.dart';
 import 'app/functions/customize_error_handling.dart';
 import 'app/routes/app_pages.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+Future<void> main() async {
   customizeErrorHandling();
   WidgetsFlutterBinding.ensureInitialized();
   //client = Client().setProject('restro');
   client = Client().setProject(projectId);
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
     GetMaterialApp(

@@ -4,6 +4,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:get/get.dart';
 import 'package:restro_delivery/app/data/enums/order_status.dart';
 
+import '../../../services/notification_service.dart';
 import '/app/data/constants.dart';
 import '../../../data/enums/delivery_status.dart';
 import '../../../data/models/order_items_model.dart';
@@ -67,6 +68,7 @@ class HomeController extends GetxController {
 
   Future<void> changeStatus(OrderItemsModel orderItemsModel, DeliveryStatus status) async {
     print("Changing status to $status");
+    var statusText = status.statusText;
     try {
       isLoading.value = true;
       await databases.updateDocument(
@@ -77,17 +79,32 @@ class HomeController extends GetxController {
       );
 
       if (status == DeliveryStatus.orderPickedUp) {
+        statusText = OrderStatus.outForDelivery.statusText;
         await databases.updateDocument(
           databaseId: dbId,
           collectionId: orderItemsCollection,
           documentId: orderItemsModel.$id,
           data: {'status': OrderStatus.outForDelivery.value},
         );
+        await databases.createDocument(
+          databaseId: dbId,
+          collectionId: orderTimelineCollection,
+          documentId: ID.unique(),
+          data: {
+            "itemId": orderItemsModel.$id,
+            "status": OrderStatus.outForDelivery.value,
+            "description": OrderStatus.outForDelivery.statusText,
+          },
+        );
       }
 
       bool isCompleted = DeliveryStatusExtension.isDeliveryCompleted(status);
       bool isFailed = DeliveryStatusExtension.isDeliveryFailed(status);
       if (isCompleted || isFailed) {
+        statusText =
+            isCompleted
+                ? OrderStatus.orderCompleted.statusText
+                : OrderStatus.orderFailed.statusText;
         await databases.updateDocument(
           databaseId: dbId,
           collectionId: orderItemsCollection,
@@ -99,19 +116,30 @@ class HomeController extends GetxController {
           },
         );
         await databases.createDocument(
-        databaseId: dbId,
-        collectionId: orderTimelineCollection,
-        documentId: ID.unique(),
-        data: {
-          "itemId": orderItemsModel.$id,
-          "status": isCompleted ? OrderStatus.orderCompleted.value : OrderStatus.orderFailed.value,
-          "description": isCompleted ? OrderStatus.orderCompleted.statusText : OrderStatus.orderFailed.statusText,
-        },
-      );
+          databaseId: dbId,
+          collectionId: orderTimelineCollection,
+          documentId: ID.unique(),
+          data: {
+            "itemId": orderItemsModel.$id,
+            "status":
+                isCompleted ? OrderStatus.orderCompleted.value : OrderStatus.orderFailed.value,
+            "description":
+                isCompleted
+                    ? OrderStatus.orderCompleted.statusText
+                    : OrderStatus.orderFailed.statusText,
+          },
+        );
       }
 
       Get.snackbar('Success', 'Ordrer status changed to ${status.statusText}');
       await getOrders();
+      if (orderItemsModel.orders.user != null) {
+        NotificationService.sendPushNotification(
+          statusText,
+          'The status of your delivery has been updated to ${statusText}',
+          orderItemsModel.orders.user,
+        );
+      }
     } catch (e) {
       Get.snackbar('Error', 'Failed to accept order: ${e.toString()}');
     } finally {

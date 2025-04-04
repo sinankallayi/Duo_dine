@@ -57,33 +57,52 @@ class OrdersView extends GetView<HomeController> {
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       child: Column(
                         children: [
-                          ListTile(
-                            title: Text(
-                              orderItemsModel.items.name,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Delivery Status: ${orderItemsModel.deliveryPerson?.deliveryStatus.statusText}',
-                                ),
-                                if (orderItemsModel.address != null &&
-                                    orderItemsModel.address?.isNotEmpty == true)
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Address: ${orderItemsModel.address}"),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap:
+                                  () => Get.to(
+                                    () => OrderDetailView(orderItemsModel: orderItemsModel),
+                                  ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      orderItemsModel.items.name,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      'Delivery Status: ${orderItemsModel.deliveryPerson?.deliveryStatus.statusText}',
+                                      style: const TextStyle(color: Colors.grey),
+                                    ),
+                                    if (orderItemsModel.address?.isNotEmpty == true) ...[
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        "Address: ${orderItemsModel.address}",
+                                        style: const TextStyle(color: Colors.grey),
+                                      ),
+                                      const SizedBox(height: 4),
                                       MapButton(address: orderItemsModel.address!),
                                     ],
-                                  ),
-                              ],
+                                    const SizedBox(height: 12),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        orderItemsModel.status.statusText,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blueAccent,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            trailing: Text(orderItemsModel.status.statusText),
-                            onTap: () {
-                              Get.to(() => OrderDetailView(orderItemsModel: orderItemsModel));
-                            },
                           ),
 
                           Padding(
@@ -148,7 +167,7 @@ class MapButton extends StatelessWidget {
       icon: const Icon(Icons.map, color: Colors.blue),
       label: const Text(
         'Open in Maps',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500 , color: Colors.blue),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.blue),
       ),
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
