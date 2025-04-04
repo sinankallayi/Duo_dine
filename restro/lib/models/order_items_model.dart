@@ -55,12 +55,34 @@ class OrderItemsModel {
   }
 
   bool isRejectedOrNoAction() {
-    return isCooking() && deliveryPerson != null && [DeliveryStatus.newOrderAssigned, DeliveryStatus.rejectedOrder, DeliveryStatus.acceptedOrder].contains(deliveryPerson?.deliveryStatus);
+    return isCooking() &&
+        deliveryPerson != null &&
+        [
+          DeliveryStatus.newOrderAssigned,
+          DeliveryStatus.rejectedOrder,
+          DeliveryStatus.acceptedOrder
+        ].contains(deliveryPerson?.deliveryStatus);
   }
 
   bool isWaitingForDriver() {
     return OrderStatus.foodReadyForPickup == status &&
         deliveryPerson?.deliveryStatus != DeliveryStatus.arrivedAtRestaurant;
+  }
+
+  bool isDelivering() {
+    return deliveryPerson?.deliveryStatus !=
+        [
+          DeliveryStatus.headingToRestaurant,
+          DeliveryStatus.arrivedAtRestaurant,
+          DeliveryStatus.orderPickedUp,
+          DeliveryStatus.headingToCustomer,
+          DeliveryStatus.arrivedAtCustomer,
+          DeliveryStatus.delivered,
+          DeliveryStatus.orderCanceled,
+          DeliveryStatus.customerUnreachable,
+          DeliveryStatus.deliveryFailed,
+          DeliveryStatus.returnedToRestaurant,
+        ].contains(status);
   }
 
   DeliveryAction get assignDriver => DeliveryAction(
@@ -73,11 +95,10 @@ class OrderItemsModel {
         nextStatus: DeliveryStatus.newOrderAssigned,
       );
 
-      DeliveryAction get changeDriver => DeliveryAction(
+  DeliveryAction get changeDriver => DeliveryAction(
         label: "Change Driver",
-        onTap: (OrderItemsModel orderItem) => Get.snackbar(
-            orderItem.items.name, "Changed Delivery Person",
-            colorText: Colors.blue),
+        onTap: (OrderItemsModel orderItem) =>
+            Get.snackbar(orderItem.items.name, "Changed Delivery Person", colorText: Colors.blue),
         color: Colors.orange,
         icon: Icons.delivery_dining,
         nextStatus: DeliveryStatus.newOrderAssigned,

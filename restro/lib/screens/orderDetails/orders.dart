@@ -1,6 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/constants.dart';
+import 'package:foodly_ui/models/enums/order_status.dart';
 import 'package:foodly_ui/models/order_items_model.dart';
 import 'package:foodly_ui/models/order_model.dart';
 import 'package:foodly_ui/screens/orderDetails/order_timeline/timeline_screen.dart';
@@ -47,6 +48,14 @@ class Orders extends GetView<OrdersController> {
                 style:
                     Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
+              if (controller.item!.address != null)
+                Text(
+                  "Address: ${controller.item!.address}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w600),
+                ),
               const SizedBox(height: defaultPadding),
               // List of Order Items
               ...List.generate(
@@ -78,9 +87,14 @@ class Orders extends GetView<OrdersController> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              "${controller.items[index].status.name.replaceAllMapped(RegExp(r'([a-z])([A-Z])'), (match) => '${match.group(1)} ${match.group(2)}').capitalizeFirst!}",
+                              "${controller.items[index].status.statusText}",
                               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                             ),
+                            if (controller.items[index].status == OrderStatus.orderCancelled)
+                              Text(
+                                "Your order has been canceled. The refund will be processed to the same account within 7 working days.",
+                                style: TextStyle(fontSize: 14, color: Colors.red[400]),
+                              ),
                             const SizedBox(height: 8),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -50,7 +50,6 @@ class OrderedItemCard extends StatelessWidget {
                   "₹$price",
                   style: Theme.of(context).textTheme.labelSmall!.copyWith(color: primaryColor),
                 ),
-                if (status != null) Text(status ?? "")
               ],
             )
           ],

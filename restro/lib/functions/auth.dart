@@ -5,14 +5,17 @@ import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/data.dart';
 import 'package:get/get.dart';
 
-Future<void> login({required String email, required String password}) async {
+Future<bool> login({required String email, required String password}) async {
   // login logic
   debugPrint('Logging in...');
   try {
     await account.createEmailPasswordSession(email: email, password: password);
     debugPrint('Login successful');
+    return true;
   } on AppwriteException catch (e) {
+    Get.snackbar("Error", e.message ?? "", backgroundColor: Colors.red);
     debugPrint('Login failed: ${e.message}');
+    return false;
   }
 }
 
@@ -37,7 +40,7 @@ Future<void> register(
         await account.create(userId: ID.unique(), email: email!, password: password!, name: name!);
     await account.createEmailPasswordSession(email: email, password: password);
   } on AppwriteException catch (e) {
-    Get.snackbar("Error", e.message ?? "", colorText: Colors.red);
+    Get.snackbar("Error", e.message ?? "", backgroundColor: Colors.red);
     debugPrint('Error: ${e.message}');
   }
 }

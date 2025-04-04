@@ -10,6 +10,7 @@ class OrderDetailsController extends GetxController {
   final PaymentController paymentController = Get.put(PaymentController());
   RxList<CartModel> cartItems = <CartModel>[].obs;
   RxList<OrderModel> orders = <OrderModel>[].obs;
+  var location = ''.obs;
   final cartPrice = 0.0.obs;
   final orderPrice = 0.0.obs;
 

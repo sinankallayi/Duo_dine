@@ -146,6 +146,7 @@ class OrdersController extends GetxController {
 
   Future<void> assignDeliveryPerson(
       OrderItemsModel orderItemsModel, DeliveryPersonModel deliveryPerson) async {
+    await _dbService.clearDeliveryPersonFromOrders(deliveryPerson.$id);
     await db.updateDocument(
       databaseId: dbId,
       collectionId: orderItemsCollection,
@@ -197,10 +198,11 @@ class OrdersController extends GetxController {
   }
 
   getDeliveryPersons() async {
-    var result = await db.listDocuments(
-      databaseId: dbId,
-      collectionId: deliveryPersonsCollection,
-    );
+    var result =
+        await db.listDocuments(databaseId: dbId, collectionId: deliveryPersonsCollection, queries: [
+      ...DeliveryStatusExtension.inProgressStates
+          .map((e) => Query.notEqual('deliveryStatus', e.value)),
+    ]);
 
     deliveryPersons =
         result.documents.map((e) => DeliveryPersonModel.fromJson(e.data)).toList().obs;

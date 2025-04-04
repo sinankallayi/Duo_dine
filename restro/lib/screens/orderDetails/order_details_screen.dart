@@ -7,12 +7,15 @@ import 'package:intl/intl.dart';
 
 import '../../components/buttons/primary_button.dart';
 import '../../constants.dart';
+import '../../functions/location.dart';
 import 'components/order_item_card.dart';
 import 'components/price_row.dart';
 import 'components/total_price.dart';
 
 class OrderDetailsScreen extends GetView<OrderDetailsController> {
-  const OrderDetailsScreen({super.key});
+  OrderDetailsScreen({super.key});
+
+  final TextEditingController _locationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -92,14 +95,23 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
                       ),
                     ),
                     const SizedBox(height: defaultPadding * 2),
+     _buildLocationField(),
+                    
+                    const SizedBox(height: defaultPadding * 2),
 
                     // **Checkout Button**
                     PrimaryButton(
                       text: "Checkout (\₹${controller.cartPrice.value})",
                       press: () {
+                        if (controller.location.value.isEmpty) {
+                          Get.snackbar('Error', 'Please enter valid address', backgroundColor: Colors.red);
+                          return;
+                        }
+
                         Get.to(
                           () => const PaymentScreen(),
                           arguments: {
+                            "location": controller.location.value,
                             "price": controller.cartPrice.value,
                             "items": controller.cartItems,
                           },
@@ -148,4 +160,24 @@ class OrderDetailsScreen extends GetView<OrderDetailsController> {
       ),
     );
   }
+
+  Widget _buildLocationField() {
+    return TextFormField(
+      controller: _locationController,
+      decoration: InputDecoration(
+        labelText: 'Address *',
+        suffixIcon: IconButton(
+          onPressed: () async {
+            _locationController.text = await getLocation();
+            controller.location.value = _locationController.text;
+          },
+          icon: const Icon(Icons.location_on),
+        ),
+      ),
+      validator: (value) => value == null || value.isEmpty ? 'Please enter the location' : null,
+      onChanged: (value) => controller.location.value = value,
+      onSaved: (value) => controller.location.value = value!,
+    );
+  }
+
 }

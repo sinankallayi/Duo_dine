@@ -5,6 +5,7 @@ class OrderModel {
   double total_price;
   int itemCount;
   String status;
+  String? address;
   String? user;
   String? complaints;
 
@@ -15,6 +16,7 @@ class OrderModel {
     required this.itemCount,
     required this.createdDate,
     required this.status,
+    required this.address,
     required this.user,
     required this.complaints,
   });
@@ -29,6 +31,7 @@ class OrderModel {
       total_price: double.parse(json['total_price'].toString()),
       itemCount: json['itemCount'] ?? 0,
       status: json['status'],
+      address: json['address'],
       user: json['users'].toString(),
       complaints: json['complaints'],
     );
